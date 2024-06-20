@@ -1,9 +1,9 @@
 
-#include <iostream>
+#include <fmt/format.h>
 
 
 
 int main() {
 
-    std::cout << "Hello, World!" << std::endl;
+    fmt::print("Hello, World!\n");
 }

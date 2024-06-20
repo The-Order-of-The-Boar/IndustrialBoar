@@ -2,6 +2,7 @@
 # ------------------------------ cmake config --------------------------------
 cmake_minimum_required(VERSION 3.22)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_TOOLCHAIN_FILE ./vcpkg/scripts/buildsystems/vcpkg.cmake CACHE PATH "vcpkg root path")
 
 # remove default flags
 set(CMAKE_CXX_FLAGS_DEBUG "" CACHE STRING "debug build flags")
@@ -56,4 +57,11 @@ endif()
 
 # ------------------------------- game target --------------------------------
 add_executable(game src/game/main.cpp)
+target_link_libraries(game PRIVATE fmt::fmt)
 set_compile_flags(game)
+
+
+# |--------------------------------------------------------------------------|
+# |                               dependencies                               |
+# |--------------------------------------------------------------------------|
+find_package(fmt CONFIG REQUIRED)
