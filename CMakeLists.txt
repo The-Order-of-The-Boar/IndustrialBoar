@@ -57,7 +57,7 @@ endif()
 
 # ------------------------------- game target --------------------------------
 add_executable(game src/game/main.cpp)
-target_link_libraries(game PRIVATE fmt::fmt)
+target_link_libraries(game PRIVATE fmt::fmt glm::glm SDL2 SDL2_image)
 set_compile_flags(game)
 
 
@@ -65,3 +65,5 @@ set_compile_flags(game)
 # |                               dependencies                               |
 # |--------------------------------------------------------------------------|
 find_package(fmt CONFIG REQUIRED)
+find_package(glm CONFIG REQUIRED)
+

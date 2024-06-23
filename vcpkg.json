@@ -6,6 +6,10 @@
       {
         "name": "fmt",
         "version>=": "10.2.1"
+      },
+      {
+        "name": "glm",
+        "version>=": "1.0.1"
       }
     ],
   
