@@ -62,6 +62,8 @@ add_library(industrialboar STATIC
     src/lib/utils/assert.cpp
     src/lib/utils/log.hpp
     src/lib/utils/log.cpp
+    src/lib/core/entity_manager.hpp
+    src/lib/core/entity_manager.cpp
 )
 target_include_directories(industrialboar INTERFACE src/lib)
 target_link_libraries(industrialboar PUBLIC fmt::fmt glm::glm SDL2 SDL2_image)

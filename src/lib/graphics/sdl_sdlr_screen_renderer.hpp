@@ -6,7 +6,6 @@
 #include <unordered_map>
 
 // local
-#include "../utils/log.hpp"
 #include "../utils/assert.hpp"
 #include "screen_renderer.hpp"
 
