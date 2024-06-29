@@ -68,7 +68,7 @@ target_link_libraries(game PRIVATE industrialboar)
 set_compile_flags(game)
 
 # ------------------------------ tests target --------------------------------
-add_executable(tests src/bin/tests/__placeholder__.cpp)
+add_executable(tests src/bin/tests/example.cpp)
 target_link_libraries(tests PRIVATE industrialboar Catch2::Catch2 Catch2::Catch2WithMain)
 set_compile_flags(tests)
 
@@ -78,4 +78,3 @@ set_compile_flags(tests)
 find_package(fmt CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
 find_package(Catch2 CONFIG REQUIRED)
-
