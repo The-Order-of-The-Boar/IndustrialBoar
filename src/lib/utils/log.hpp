@@ -9,9 +9,9 @@
 
 
 [[noreturn]]
-void panic(std::string_view const message);
-void warn(std::string_view const message);
-void info(std::string_view const message);
+void panic(std::string_view message);
+void warn(std::string_view message);
+void info(std::string_view message);
 
 
 class GameGracefulExit{};
