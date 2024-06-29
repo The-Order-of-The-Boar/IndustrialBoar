@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -e
 
-GAME_TARGET="game"
+TEST_TARGET="tests"
 
 if (($# < 1)) || (($# > 1)); then
-    echo "invalid number of parameters, usage: run.sh <build type>"
+    echo "invalid number of parameters, usage: test.sh <build type>"
     exit 1
 fi
 
@@ -22,4 +22,4 @@ export LSAN_OPTIONS='suppressions=surpress_leaks.txt,report_objects=1'
 echo ""
 echo "Running the target..."
 echo "---------------------"
-$build_dir/$GAME_TARGET
+$build_dir/$TEST_TARGET
