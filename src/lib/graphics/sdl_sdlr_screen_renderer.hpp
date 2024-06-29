@@ -21,44 +21,13 @@
 // TODO: support HIDPI displays
 
 
-struct SDL_Texture
-{
-    const void *magic;
-    Uint32 format;           /**< The pixel format of the texture */
-    int access;              /**< SDL_TextureAccess */
-    int w;                   /**< The width of the texture */
-    int h;                   /**< The height of the texture */
-    int modMode;             /**< The texture modulation mode */
-    SDL_BlendMode blendMode; /**< The texture blend mode */
-    SDL_ScaleMode scaleMode; /**< The texture scale mode */
-    SDL_Color color;         /**< Texture modulation values */
-
-    SDL_Renderer *renderer;
-
-    /* Support for formats not supported directly by the renderer */
-    SDL_Texture *native;
-    void *yuv;
-    void *pixels;
-    int pitch;
-    SDL_Rect locked_rect;
-    SDL_Surface *locked_surface; /**< Locked region exposed as a SDL surface */
-
-    Uint32 last_command_generation; /* last command queue generation this texture was in. */
-
-    void *driverdata; /**< Driver specific texture representation */
-    void *userdata;
-
-    SDL_Texture *prev;
-    SDL_Texture *next;
-};
-
 
 struct SDLRScreenRendererTexture {
 public:
 
     SDL_Texture* texture = nullptr;
 
-public:
+public: // ctor's, dtor's, and move semantics
 
     SDLRScreenRendererTexture(SDL_Texture* const texture) : texture{texture} {}
     SDLRScreenRendererTexture(SDLRScreenRendererTexture const&) = delete;
@@ -78,6 +47,16 @@ public:
         return *this;
     }
 
+    ~SDLRScreenRendererTexture() {
+
+        if (this->texture == nullptr)
+            return;
+
+        SDL_DestroyTexture(this->texture);
+    }
+
+public: // public methods
+
     glm::u64vec2 get_size() const {
 
         int width, height;
@@ -85,16 +64,9 @@ public:
         ib_runtime_assert(result == 0, fmt::format("Failed to query SDL texture size, {}", SDL_GetError()));
         return glm::u64vec2{(uint64_t)width, (uint64_t)height};
     }
-
-    ~SDLRScreenRendererTexture() {
-
-        if (this->texture == nullptr)
-            return;
-
-        warn("destroying texture");
-        SDL_DestroyTexture(this->texture);
-    }
 };
+
+
 
 class SDLRScreenRenderer final : public ScreenRenderer {
 private:
