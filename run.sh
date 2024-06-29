@@ -15,6 +15,9 @@ build_dir="./build/$(echo "$build_type" | tr '[:upper:]' '[:lower:]')"
 # latest changes and to ensure that the project is built with the correct
 ./build.sh $build_type
 
+# setup AddressSanitizer suppressions
+export LSAN_OPTIONS='suppressions=surpress_leaks.txt,report_objects=1'
+
 # run the target
 echo ""
 echo "Running the target..."

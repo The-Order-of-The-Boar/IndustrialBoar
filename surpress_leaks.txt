@@ -1,0 +1,4 @@
+leak:SDL_DBus_Init_Spinlocked
+leak:SDL_CreateWindow_REAL
+leak:ffi_call_unix64
+leak:IMG_LoadTexture

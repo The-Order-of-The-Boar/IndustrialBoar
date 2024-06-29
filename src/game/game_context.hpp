@@ -52,9 +52,24 @@ public:
         return *this->screen_renderer;
     }
 
+    void flush_events() {
+
+        SDL_Event event;
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT)
+                graceful_exit();
+        }
+    }
+
     ~GameContext() {
 
+        // since the dtor's of the class members are called after this dtor, we
+        // need to manually trigger the destruction of any object which might
+        // depend on SDL or ImGui runtime to perform an graceful shutdown
+        this->screen_renderer.reset();
+
         SDL_DestroyWindow(this->window);
+        IMG_Quit();
         SDL_Quit();
     }
 };

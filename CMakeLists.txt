@@ -29,6 +29,7 @@ function(set_compile_flags target)
         -fdiagnostics-color=always
 
         $<$<CONFIG:DEBUG,RELWITHDEBINFO>:-g>
+        $<$<CONFIG:DEBUG,RELWITHDEBINFO>:-fno-omit-frame-pointer>
     )
 
     target_link_options(${target} PRIVATE

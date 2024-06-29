@@ -1,12 +1,12 @@
 #pragma once
 
 // builtin
-#include <exception>
 #include <string_view>
 #include <iostream>
 
 // TODO: use a separated file for definitions
 // TODO: get the location where the function where called and print then
+// TODO: give colors to the messages
 
 
 
@@ -14,7 +14,7 @@
 inline void panic(std::string_view const message) {
 
     std::cout << "PANIC: " << message << "\n";
-    std::terminate();
+    std::abort();
 }
 
 inline void warn(std::string_view const message) {
@@ -25,4 +25,14 @@ inline void warn(std::string_view const message) {
 inline void info(std::string_view const message) {
 
     std::cout << "INFO: " << message << "\n";
+}
+
+
+
+class GameGracefulExit{};
+
+inline void graceful_exit() {
+
+    info("Starting graceful exit...");
+    throw GameGracefulExit{};
 }

@@ -6,6 +6,7 @@
 #include <unordered_map>
 
 // local
+#include "log.hpp"
 #include "screen_renderer.hpp"
 #include "assert.hpp"
 
@@ -19,6 +20,37 @@
 
 // TODO: support HIDPI displays
 
+
+struct SDL_Texture
+{
+    const void *magic;
+    Uint32 format;           /**< The pixel format of the texture */
+    int access;              /**< SDL_TextureAccess */
+    int w;                   /**< The width of the texture */
+    int h;                   /**< The height of the texture */
+    int modMode;             /**< The texture modulation mode */
+    SDL_BlendMode blendMode; /**< The texture blend mode */
+    SDL_ScaleMode scaleMode; /**< The texture scale mode */
+    SDL_Color color;         /**< Texture modulation values */
+
+    SDL_Renderer *renderer;
+
+    /* Support for formats not supported directly by the renderer */
+    SDL_Texture *native;
+    void *yuv;
+    void *pixels;
+    int pitch;
+    SDL_Rect locked_rect;
+    SDL_Surface *locked_surface; /**< Locked region exposed as a SDL surface */
+
+    Uint32 last_command_generation; /* last command queue generation this texture was in. */
+
+    void *driverdata; /**< Driver specific texture representation */
+    void *userdata;
+
+    SDL_Texture *prev;
+    SDL_Texture *next;
+};
 
 
 struct SDLRScreenRendererTexture {
@@ -56,6 +88,10 @@ public:
 
     ~SDLRScreenRendererTexture() {
 
+        if (this->texture == nullptr)
+            return;
+
+        warn("destroying texture");
         SDL_DestroyTexture(this->texture);
     }
 };
@@ -71,11 +107,16 @@ public:
 
     SDLRScreenRenderer(SDL_Window* window) {
 
-        this->renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+        this->renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
         ib_runtime_assert(this->renderer != nullptr, "Failed to create SDL renderer");
     }
 
     ~SDLRScreenRenderer() {
+
+        // since the dtor's of the class members are called after this dtor, we
+        // need to manually trigger the destruction of any object which might
+        // depend the renderer to perform an graceful shutdown.
+        this->textures.clear();
 
         SDL_DestroyRenderer(this->renderer);
     }
@@ -123,6 +164,11 @@ public:
         SDL_RenderDrawLine(this->renderer, start.x, start.y, end.x, end.y);
     }
 
+    void start_frame() override {
+
+        this->clear({0, 0, 0});
+    }
+
     void present() override {
 
         SDL_RenderPresent(this->renderer);
@@ -132,11 +178,7 @@ private:
 
     SDLRScreenRendererTexture load_sdl_texture(std::string_view const path) {
 
-        SDL_Surface* const surface = IMG_Load(path.data());
-        ib_runtime_assert(surface != nullptr, "Failed to load SDL texture");
-
-        SDL_Texture* const texture = SDL_CreateTextureFromSurface(this->renderer, surface);
-        SDL_FreeSurface(surface);
+        SDL_Texture* const texture = IMG_LoadTexture(this->renderer, path.data());
         ib_runtime_assert(texture != nullptr, "Failed to create SDL texture");
 
         return SDLRScreenRendererTexture{texture};
