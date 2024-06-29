@@ -8,7 +8,7 @@
 #include <fmt/format.h>
 
 
-
+[[noreturn]]
 void game_main() {
 
     GameContext game_context{"Industrial Boar",  {1024, 1024}};
@@ -19,7 +19,7 @@ void game_main() {
     while (true) {
         
         pos += 1;
-        pos = fmodl(pos, 1024);
+        pos = fmod(pos, 1024);
 
         game_context.flush_events();
 

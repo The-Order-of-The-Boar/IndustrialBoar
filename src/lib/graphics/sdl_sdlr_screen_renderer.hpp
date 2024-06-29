@@ -28,7 +28,7 @@ public:
 
 public: // ctor's, dtor's, and move semantics
 
-    SDLRScreenRendererTexture(SDL_Texture* const texture) : texture{texture} {}
+    explicit SDLRScreenRendererTexture(SDL_Texture* const texture) : texture{texture} {}
     SDLRScreenRendererTexture(SDLRScreenRendererTexture const&) = delete;
     SDLRScreenRendererTexture& operator=(SDLRScreenRendererTexture const&) = delete;
 
@@ -56,6 +56,7 @@ public: // ctor's, dtor's, and move semantics
 
 public: // public methods
 
+    [[nodiscard]]
     glm::u64vec2 get_size() const {
 
         int width, height;
@@ -76,17 +77,17 @@ private:
 
 public:
 
-    SDLRScreenRenderer(SDL_Window* window) {
+    explicit SDLRScreenRenderer(SDL_Window* window) {
 
         this->renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
         ib_runtime_assert(this->renderer != nullptr, "Failed to create SDL renderer");
     }
 
-    ~SDLRScreenRenderer() {
+    ~SDLRScreenRenderer() final {
 
-        // since the dtor's of the class members are called after this dtor, we
+        // since the dtor of the class members are called after this dtor, we
         // need to manually trigger the destruction of any object which might
-        // depend the renderer to perform an graceful shutdown.
+        // depend on the renderer to perform a graceful shutdown.
         this->textures.clear();
 
         SDL_DestroyRenderer(this->renderer);
@@ -132,7 +133,7 @@ public:
     void draw_line(const glm::u64vec2 start, const glm::u64vec2 end, const glm::u8vec3 color) override {
 
         SDL_SetRenderDrawColor(this->renderer, color.r, color.g, color.b, 255);
-        SDL_RenderDrawLine(this->renderer, start.x, start.y, end.x, end.y);
+        SDL_RenderDrawLine(this->renderer, (int)start.x, (int)start.y, (int)end.x, (int)end.y);
     }
 
     void start_frame() override {

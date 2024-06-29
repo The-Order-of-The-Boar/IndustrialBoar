@@ -67,8 +67,6 @@ public:
 
     // implementation specific
     [[nodiscard]] virtual bool is_child_guard_public() const = 0;
-    virtual void update(double delta) = 0;
-    virtual void render() const = 0;
 };
 
 class EntityManager {

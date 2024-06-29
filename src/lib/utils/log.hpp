@@ -14,7 +14,7 @@ void warn(std::string_view message);
 void info(std::string_view message);
 
 
-class GameGracefulExit{};
+class GameGracefulExit: public std::exception {};
 
 [[noreturn]]
 void graceful_exit();

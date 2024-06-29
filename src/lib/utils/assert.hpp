@@ -8,5 +8,5 @@
 
 
 
-void ib_runtime_assert(bool result, std::string_view const message = "");
-void ib_debug_assert(bool result, std::string_view const message = "");
+void ib_runtime_assert(bool result, std::string_view message = "");
+void ib_debug_assert(bool result, std::string_view message = "");

@@ -26,7 +26,7 @@ private:
 
 public:
 
-    GameContext(std::string const& window_name, glm::u32vec2 const initial_window_size) {
+    GameContext(std::string const& window_name, glm::u64vec2 const initial_window_size) {
 
         // initialize SDL context
         ib_runtime_assert(SDL_Init(SDL_INIT_VIDEO) == 0, "Failed to initialize SDL");
@@ -36,7 +36,7 @@ public:
         this->window = SDL_CreateWindow(
             window_name.c_str(),
             SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-            initial_window_size.x, initial_window_size.y,
+            (int)initial_window_size.x, (int)initial_window_size.y,
             SDL_WINDOW_SHOWN
         );
         ib_runtime_assert(this->window != nullptr, "Failed to create SDL window");
@@ -50,7 +50,7 @@ public:
         return *this->screen_renderer;
     }
 
-    void flush_events() {
+    void flush_events() { // NOLINT(*-convert-member-functions-to-static)
 
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
