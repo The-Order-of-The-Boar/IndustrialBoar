@@ -4,13 +4,11 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_video.h>
 #include <string>
-#include <cstdint>
-#include <cstddef>
 #include <memory>
 
 // local
-#include "assert.hpp"
-#include "log.hpp"
+#include "../utils/assert.hpp"
+#include "../utils/log.hpp"
 #include "screen_renderer.hpp"
 #include "sdl_sdlr_screen_renderer.hpp"
 

@@ -6,9 +6,9 @@
 #include <unordered_map>
 
 // local
-#include "log.hpp"
+#include "../utils/log.hpp"
+#include "../utils/assert.hpp"
 #include "screen_renderer.hpp"
-#include "assert.hpp"
 
 // external
 #include <glm/vec2.hpp>

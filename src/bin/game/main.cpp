@@ -1,6 +1,6 @@
 
 // local
-#include <game_context.hpp>
+#include <graphics/game_context.hpp>
 
 // external
 #include <cmath>
