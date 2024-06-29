@@ -56,15 +56,26 @@ endif()
 # |                              project targets                             |
 # |--------------------------------------------------------------------------|
 
+# ------------------------------- library target -----------------------------
+add_library(industrialboar STATIC src/lib/__placeholder__.cpp)
+target_include_directories(industrialboar INTERFACE src/lib)
+target_link_libraries(industrialboar PUBLIC fmt::fmt glm::glm SDL2 SDL2_image)
+set_compile_flags(industrialboar)
+
 # ------------------------------- game target --------------------------------
-add_executable(game src/game/main.cpp)
-target_link_libraries(game PRIVATE fmt::fmt glm::glm SDL2 SDL2_image)
+add_executable(game src/bin/game/main.cpp)
+target_link_libraries(game PRIVATE industrialboar)
 set_compile_flags(game)
 
+# ------------------------------ tests target --------------------------------
+add_executable(tests src/bin/tests/__placeholder__.cpp)
+target_link_libraries(tests PRIVATE industrialboar Catch2::Catch2 Catch2::Catch2WithMain)
+set_compile_flags(tests)
 
 # |--------------------------------------------------------------------------|
 # |                               dependencies                               |
 # |--------------------------------------------------------------------------|
 find_package(fmt CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
+find_package(Catch2 CONFIG REQUIRED)
 
