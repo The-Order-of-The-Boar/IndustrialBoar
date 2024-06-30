@@ -33,8 +33,8 @@ class EntityChildGuard {
 private:
     friend class EntityManager;
     EntityID parent_id;
-
 public:
+    explicit EntityChildGuard(EntityID _parent_id): parent_id(_parent_id) {}
     [[nodiscard]] EntityID get_parent_id() const { return this->parent_id; }
     [[nodiscard]] explicit operator EntityID() { return this->parent_id; }
 };
@@ -62,8 +62,15 @@ public:
     [[nodiscard]] std::optional<std::string> get_child_name_by_index(const EntityManager &manager, size_t index) const;
     void remove_child_name(EntityManager& manager, size_t index);
     void set_child_index(EntityManager& manager, size_t index, size_t new_index);
-    [[nodiscard]] EntityID get_child_by_index(EntityManager const& manager, size_t index) const;
-    [[nodiscard]] EntityID get_child_by_name(EntityManager const& manager, std::string_view name) const;
+    [[nodiscard]] Entity& get_child_by_id(EntityManager &manager, EntityID child_id) const;
+    [[nodiscard]] Entity const& get_child_by_id(EntityManager const &manager, EntityID child_id) const;
+    [[nodiscard]] Entity& get_child_by_index(EntityManager &manager, size_t index) const;
+    [[nodiscard]] Entity const& get_child_by_index(EntityManager const &manager, size_t index) const;
+    [[nodiscard]] Entity& get_child_by_name(EntityManager &manager, std::string_view name) const;
+    [[nodiscard]] Entity const& get_child_by_name(EntityManager const &manager, std::string_view name) const;
+    [[nodiscard]] EntityID get_child_id_by_index(const EntityManager &manager, size_t index) const;
+    [[nodiscard]] EntityID get_child_id_by_name(const EntityManager &manager, std::string_view name) const;
+    [[nodiscard]] size_t get_child_count(EntityManager const& manager) const;
 
     // implementation specific
     [[nodiscard]] virtual bool is_child_guard_public() const = 0;

@@ -75,7 +75,8 @@ target_link_libraries(game PRIVATE industrialboar)
 set_compile_flags(game)
 
 # ------------------------------ tests target --------------------------------
-add_executable(tests src/bin/tests/example.cpp)
+add_executable(tests src/bin/tests/example.cpp
+        src/bin/tests/entity_manager.cpp)
 target_link_libraries(tests PRIVATE industrialboar Catch2::Catch2 Catch2::Catch2WithMain)
 set_compile_flags(tests)
 
