@@ -3,8 +3,8 @@
 // builtin
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_video.h>
-#include <string>
 #include <memory>
+#include <string>
 
 // local
 #include "../utils/assert.hpp"
@@ -13,12 +13,13 @@
 #include "sdl_sdlr_screen_renderer.hpp"
 
 // external
-#include <glm/vec2.hpp>
 #include <SDL2/SDL.h>
+#include <glm/vec2.hpp>
 
 
 
-class GameContext {
+class GameContext
+{
 private:
 
     SDL_Window* window = nullptr;
@@ -26,41 +27,40 @@ private:
 
 public:
 
-    GameContext(std::string const& window_name, glm::u64vec2 const initial_window_size) {
-
+    GameContext(std::string const& window_name, glm::u64vec2 const initial_window_size)
+    {
         // initialize SDL context
         ib_runtime_assert(SDL_Init(SDL_INIT_VIDEO) == 0, "Failed to initialize SDL");
         ib_runtime_assert(IMG_Init(IMG_INIT_PNG) == IMG_INIT_PNG, "Failed to initialize SDL_image");
-        
+
         // create window
-        this->window = SDL_CreateWindow(
-            window_name.c_str(),
-            SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-            (int)initial_window_size.x, (int)initial_window_size.y,
-            SDL_WINDOW_SHOWN
-        );
+        this->window = SDL_CreateWindow(window_name.c_str(), SDL_WINDOWPOS_CENTERED,
+                                        SDL_WINDOWPOS_CENTERED, (int)initial_window_size.x,
+                                        (int)initial_window_size.y, SDL_WINDOW_SHOWN);
         ib_runtime_assert(this->window != nullptr, "Failed to create SDL window");
 
         // create screen renderer
         this->screen_renderer = std::make_unique<SDLRScreenRenderer>(this->window);
     }
 
-    ScreenRenderer& get_screen_renderer() {
-
+    ScreenRenderer& get_screen_renderer()
+    {
         return *this->screen_renderer;
     }
 
-    void flush_events() { // NOLINT(*-convert-member-functions-to-static)
+    void flush_events()
+    { // NOLINT(*-convert-member-functions-to-static)
 
         SDL_Event event;
-        while (SDL_PollEvent(&event)) {
+        while (SDL_PollEvent(&event))
+        {
             if (event.type == SDL_QUIT)
                 graceful_exit();
         }
     }
 
-    ~GameContext() {
-
+    ~GameContext()
+    {
         // since the dtor's of the class members are called after this dtor, we
         // need to manually trigger the destruction of any object which might
         // depend on SDL or ImGui runtime to perform an graceful shutdown

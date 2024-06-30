@@ -8,16 +8,16 @@
 #include <fmt/format.h>
 
 
-[[noreturn]]
-void game_main() {
+[[noreturn]] void game_main()
+{
+    GameContext game_context{"Industrial Boar", {1024, 1024}};
 
-    GameContext game_context{"Industrial Boar",  {1024, 1024}};
-
-    auto example_texture = game_context.get_screen_renderer().load_texture("assets/textures/godot.png");
+    auto example_texture =
+        game_context.get_screen_renderer().load_texture("assets/textures/godot.png");
     double pos = -100;
 
-    while (true) {
-        
+    while (true)
+    {
         pos += 1;
         pos = fmod(pos, 1024);
 
@@ -30,12 +30,14 @@ void game_main() {
     }
 }
 
-int main() {
-
-    try {
+int main()
+{
+    try
+    {
         game_main();
     }
-    catch (GameGracefulExit const&) {
+    catch (GameGracefulExit const&)
+    {
         info("Game exited gracefully");
     }
 }
