@@ -4,28 +4,58 @@
 // builtin
 #include <iostream>
 
+// external
+#include <fmt/format.h>
 
 
-void panic(std::string_view const message) {
 
-  std::cout << "PANIC: " << message << "\n";
-  std::abort();
+static bool panic_throw_mode = false;
+
+void enable_panic_throw_mode() {
+
+    panic_throw_mode = true;
 }
 
-void warn(std::string_view const message) {
+void disable_panic_throw_mode() {
 
-  std::cout << "WARNING: " << message << "\n";
+    panic_throw_mode = false;
 }
 
-void info(std::string_view const message) {
+bool get_panic_throw_mode() {
 
-  std::cout << "INFO: " << message << "\n";
+    return panic_throw_mode;
+}
+
+
+std::string format_source_location(std::source_location location) {
+
+    return fmt::format("[{}]({}:{})", location.file_name(), location.line(), location.column());
+}
+
+void panic(std::string_view const raw_message, std::source_location location) {
+
+    std::string message = fmt::format("{} PANIC: {}", format_source_location(location), raw_message);
+
+    if (panic_throw_mode)
+        throw PanicException{message};
+    else
+        std::abort();
+}
+
+void warn(std::string_view const raw_message, std::source_location location) {
+
+    std::string message = fmt::format("{} WARN: {}", format_source_location(location), raw_message);
+}
+
+void info(std::string_view const raw_message, std::source_location location) {
+
+    std::string message = fmt::format("{} INFO: {}", format_source_location(location), raw_message);
 }
 
 
 
-void graceful_exit() {
+void graceful_exit(std::source_location location) {
 
-  info("Starting graceful exit...");
-  throw GameGracefulExit{};
+    info("Starting graceful exit...", location);
+    throw GameGracefulExit{};
 }
