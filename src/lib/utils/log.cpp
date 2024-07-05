@@ -45,11 +45,13 @@ void panic(std::string_view const raw_message, std::source_location location)
 void warn(std::string_view const raw_message, std::source_location location)
 {
     std::string message = fmt::format("{} WARN: {}", format_source_location(location), raw_message);
+    fmt::print("{}\n", message);
 }
 
 void info(std::string_view const raw_message, std::source_location location)
 {
     std::string message = fmt::format("{} INFO: {}", format_source_location(location), raw_message);
+    fmt::print("{}\n", message);
 }
 
 
