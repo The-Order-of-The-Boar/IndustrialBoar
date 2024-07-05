@@ -1,9 +1,6 @@
 // header
 #include "log.hpp"
 
-// builtin
-#include <iostream>
-
 // external
 #include <fmt/format.h>
 
@@ -36,6 +33,8 @@ void panic(std::string_view const raw_message, std::source_location location)
 {
     std::string message =
         fmt::format("{} PANIC: {}", format_source_location(location), raw_message);
+
+    fmt::print("{}\n", message);
 
     if (panic_throw_mode)
         throw PanicException{message};
