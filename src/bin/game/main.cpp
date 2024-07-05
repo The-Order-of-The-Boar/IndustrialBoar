@@ -4,6 +4,7 @@
 #include <chrono>
 
 // local
+#include "utils/log.hpp"
 #include "core/game_context.hpp"
 #include "core/scene.hpp"
 
@@ -19,6 +20,12 @@ double calc_delta_secs(Func const& func)
     return std::chrono::duration<double>(after - before).count();
 }
 
+double floor_decimal_digits(double value, uint64_t digits)
+{
+    auto factor = std::pow(10, digits);
+    return std::floor(value * factor) / factor;
+}
+
 [[noreturn]]
 void game_main()
 {
@@ -26,9 +33,16 @@ void game_main()
     SceneManager scene_manager;
 
     double delta = 0;
+    double frame_print_timer = 0;
     while (true)
     {
-        fmt::print("delta: {}\n", delta);
+        frame_print_timer += delta;
+        if (frame_print_timer >= 2)
+        {
+            frame_print_timer = 0;
+            info(fmt::format("Frame interval: {}, FPS: {}\n", floor_decimal_digits(delta, 3), (uint64_t)(1 / delta)));
+        }
+
         auto events = game_context.flush_events();
         scene_manager.update(delta, std::move(events));
 
