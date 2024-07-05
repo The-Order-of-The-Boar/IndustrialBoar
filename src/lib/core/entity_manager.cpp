@@ -128,14 +128,14 @@ Entity const& Entity::get_child_by_name(EntityManager const& manager, std::strin
     return manager.get_entity(id);
 }
 
-Entity& Entity::get_child_by_id(EntityManager& manager, EntityID child_id) const
-{ // NOLINT(*-convert-member-functions-to-static)
+Entity& Entity::get_child_by_id(EntityManager& manager, EntityID child_id) const // NOLINT(*-convert-member-functions-to-static)
+{
 
     return manager.get_entity(child_id);
 }
 
-Entity const& Entity::get_child_by_id(EntityManager const& manager, EntityID child_id) const
-{ // NOLINT(*-convert-member-functions-to-static)
+Entity const& Entity::get_child_by_id(EntityManager const& manager, EntityID child_id) const // NOLINT(*-convert-member-functions-to-static)
+{
 
     return manager.get_entity(child_id);
 }
@@ -231,8 +231,8 @@ void EntityManager::set_child_index(EntityChildGuard guard, size_t child_index, 
     }
 
     // insert the child entity at the new position
-    parent.children.insert(parent.children.begin() + new_index,
-                           child_id); // NOLINT(*-narrowing-conversions)
+    parent.children.insert(parent.children.begin() + new_index, // NOLINT(*-narrowing-conversions)
+                           child_id);
 
     // update the index for all names pointing to after the new child position
     for (auto& [name, index]: parent.child_name_to_index)

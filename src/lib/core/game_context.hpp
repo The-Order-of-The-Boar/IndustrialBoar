@@ -1,19 +1,21 @@
 #pragma once
 
 // builtin
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_video.h>
 #include <memory>
 #include <string>
+#include <vector>
 
 // local
-#include "../utils/assert.hpp"
-#include "../utils/log.hpp"
-#include "screen_renderer.hpp"
-#include "sdl_sdlr_screen_renderer.hpp"
+#include "utils/assert.hpp"
+#include "utils/log.hpp"
+#include "graphics/screen_renderer.hpp"
+#include "graphics/sdl_sdlr_screen_renderer.hpp"
+#include "input.hpp"
 
 // external
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_video.h>
 #include <glm/vec2.hpp>
 
 
@@ -48,8 +50,9 @@ public:
         return *this->screen_renderer;
     }
 
-    void flush_events()
-    { // NOLINT(*-convert-member-functions-to-static)
+    std::vector<InputEvent> flush_events() // NOLINT(*-convert-member-functions-to-static)
+    {
+        std::vector<InputEvent> input_events;
 
         SDL_Event event;
         while (SDL_PollEvent(&event))
@@ -57,13 +60,15 @@ public:
             if (event.type == SDL_QUIT)
                 graceful_exit();
         }
+
+        return input_events;
     }
 
     ~GameContext()
     {
         // since the dtor's of the class members are called after this dtor, we
         // need to manually trigger the destruction of any object which might
-        // depend on SDL or ImGui runtime to perform an graceful shutdown
+        // depend on SDL or ImGui runtime to perform a graceful shutdown
         this->screen_renderer.reset();
 
         SDL_DestroyWindow(this->window);

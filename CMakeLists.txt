@@ -62,15 +62,22 @@ add_library(industrialboar STATIC
     src/lib/utils/assert.cpp
     src/lib/utils/log.hpp
     src/lib/utils/log.cpp
+    src/lib/core/input.hpp
+    src/lib/core/game_context.hpp
     src/lib/core/entity_manager.hpp
     src/lib/core/entity_manager.cpp
+    src/lib/core/scene.hpp
+    src/lib/core/scene.cpp
+    src/lib/scenes/main_menu.hpp
 )
 target_include_directories(industrialboar INTERFACE src/lib)
 target_link_libraries(industrialboar PUBLIC fmt::fmt glm::glm SDL2 SDL2_image)
 set_compile_flags(industrialboar)
 
 # ------------------------------- game target --------------------------------
-add_executable(game src/bin/game/main.cpp)
+add_executable(game
+    src/bin/game/main.cpp
+)
 target_link_libraries(game PRIVATE industrialboar)
 set_compile_flags(game)
 

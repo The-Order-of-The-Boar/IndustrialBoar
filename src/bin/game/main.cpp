@@ -1,32 +1,44 @@
 
-// local
-#include <graphics/game_context.hpp>
-
-// external
+// builtin
 #include <cmath>
-#include <cstdlib>
-#include <fmt/format.h>
+#include <chrono>
+
+// local
+#include "core/game_context.hpp"
+#include "core/scene.hpp"
 
 
-[[noreturn]] void game_main()
+
+template <typename Func>
+double calc_delta_secs(Func const& func)
+{
+    auto before = std::chrono::high_resolution_clock::now();
+    func();
+    auto after = std::chrono::high_resolution_clock::now();
+
+    return std::chrono::duration<double>(after - before).count();
+}
+
+[[noreturn]]
+void game_main()
 {
     GameContext game_context{"Industrial Boar", {1024, 1024}};
+    SceneManager scene_manager;
 
-    auto example_texture =
-        game_context.get_screen_renderer().load_texture("assets/textures/godot.png");
-    double pos = -100;
-
+    double delta = 0;
     while (true)
     {
-        pos += 1;
-        pos = fmod(pos, 1024);
+        fmt::print("delta: {}\n", delta);
+        auto events = game_context.flush_events();
+        scene_manager.update(delta, std::move(events));
 
-        game_context.flush_events();
-
-        auto& renderer = game_context.get_screen_renderer();
-        renderer.start_frame();
-        renderer.draw_texture(example_texture, {(uint64_t)pos, (uint64_t)pos});
-        renderer.present();
+        delta = calc_delta_secs([&]()
+        {
+            auto& renderer = game_context.get_screen_renderer();
+            renderer.clear();
+            scene_manager.render(renderer);
+            renderer.present();
+        });
     }
 }
 
