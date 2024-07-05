@@ -13,7 +13,7 @@ class MainMenu final: public Scene
 private:
 
     double pos = -100;
-    mutable std::optional<TextureID> example_texture;
+    TextureIDHolder example_texture{"assets/textures/godot.png"};
 
 public:
 
@@ -33,9 +33,6 @@ public:
 
     void render(ScreenRenderer& renderer) const override
     {
-        if (this->example_texture.has_value() == false)
-            this->example_texture.emplace(renderer.load_texture("assets/textures/godot.png"));
-
-        renderer.draw_texture(this->example_texture.value(), {(uint64_t)this->pos, (uint64_t)this->pos});
+        renderer.draw_texture(this->example_texture, {(uint64_t)this->pos, (uint64_t)this->pos});
     }
 };

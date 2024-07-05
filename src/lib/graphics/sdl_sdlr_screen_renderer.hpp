@@ -111,7 +111,7 @@ public:
         SDL_RenderClear(this->renderer);
     }
 
-    void draw_texture(const TextureID texture, const glm::u64vec2 position,
+    void draw_texture(TextureID const texture, const glm::u64vec2 position,
                       std::optional<glm::u64vec2> custom_draw_size = std::nullopt) override
     {
         SDLRScreenRendererTexture const& sdl_texture = this->textures.at(texture.id);
@@ -121,6 +121,11 @@ public:
                                     (int)draw_size.y};
 
         SDL_RenderCopy(this->renderer, sdl_texture.texture, nullptr, &dest_rect);
+    }
+    void draw_texture(TextureIDHolder const& texture_holder, const glm::u64vec2 position,
+                      std::optional<glm::u64vec2> custom_draw_size = std::nullopt) override
+    {
+        texture_holder.draw(*this, position, custom_draw_size);
     }
 
     void draw_rectangle(const glm::u64vec2 position, const glm::u64vec2 size,
