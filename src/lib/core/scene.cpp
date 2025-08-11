@@ -3,6 +3,7 @@
 
 // local
 #include "../scenes/main_menu.hpp"
+#include "../scenes/world_scene.hpp"
 
 
 
@@ -34,6 +35,7 @@ void SceneGroup::remove_scene(SceneName scene_name)
 SceneManager::SceneManager()
 {
     this->scene_group.init_scene(SceneName::MAIN_MENU, std::make_unique<MainMenu>());
+    this->scene_group.init_scene(SceneName::WORLD_SCENE, std::make_unique<WorldScene>());
     this->current_scene = SceneName::MAIN_MENU;
 }
 

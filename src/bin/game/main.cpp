@@ -26,8 +26,7 @@ double floor_decimal_digits(double value, uint64_t digits)
     return std::floor(value * factor) / factor;
 }
 
-[[noreturn]]
-void game_main()
+[[noreturn]] void game_main()
 {
     GameContext game_context{"Industrial Boar", {1024, 1024}};
     SceneManager scene_manager;

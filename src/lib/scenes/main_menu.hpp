@@ -28,7 +28,17 @@ public:
         this->pos += (delta * 60 * 5);
         this->pos = fmod(this->pos, 1024);
 
-        return std::nullopt;
+        if (this->pos > 1000)
+        {
+            SceneExit exit;
+            exit.destroy_current = true;
+            exit.next_scene = SceneName::WORLD_SCENE;
+            return exit;
+        }
+        else
+        {
+            return std::nullopt;
+        }
     }
 
     void render(ScreenRenderer& renderer) const override
