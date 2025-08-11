@@ -1,0 +1,9 @@
+# project
+/build/
+/vcpkg/
+/vcpkg_installed/
+
+# editor/IDE/linter related
+/.vscode/
+/.cache/
+/.idea/
