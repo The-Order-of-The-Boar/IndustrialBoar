@@ -69,6 +69,15 @@ add_library(industrialboar STATIC
     src/lib/core/scene.hpp
     src/lib/core/scene.cpp
     src/lib/scenes/main_menu.hpp
+    src/lib/scenes/world_scene.hpp
+    src/lib/scenes/world_scene.cpp
+    src/lib/graphics/screen_renderer.hpp
+    src/lib/graphics/sdl_sdlr_screen_renderer.hpp
+    src/lib/graphics/graphic_entity.hpp
+    src/lib/entities/belt.hpp
+    src/lib/entities/belt.cpp
+    src/lib/entities/resource.hpp
+    src/lib/entities/resource.cpp
 )
 target_include_directories(industrialboar INTERFACE src/lib)
 target_link_libraries(industrialboar PUBLIC fmt::fmt glm::glm SDL2 SDL2_image)

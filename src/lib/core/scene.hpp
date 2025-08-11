@@ -14,6 +14,7 @@
 enum class SceneName
 {
     MAIN_MENU,
+    WORLD_SCENE
 };
 
 struct SceneExit
