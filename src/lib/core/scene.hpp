@@ -1,39 +1,44 @@
 #pragma once
 
 // builtin
-#include <vector>
 #include <unordered_map>
+#include <vector>
 
 // local
-#include "input.hpp"
 #include "../graphics/screen_renderer.hpp"
 #include "../utils/assert.hpp"
+#include "input.hpp"
 
 
 
-enum class SceneName {
-     MAIN_MENU,
+enum class SceneName
+{
+    MAIN_MENU,
 };
 
-struct SceneExit {
+struct SceneExit
+{
     SceneName next_scene;
     bool destroy_current;
 };
 
 class SceneGroup;
 
-class Scene {
+class Scene
+{
 public:
 
     virtual ~Scene() = default;
 
-    virtual std::optional<SceneExit> update(double delta, std::vector<InputEvent> input_events, SceneGroup& scene_group) = 0;
+    virtual std::optional<SceneExit> update(double delta, std::vector<InputEvent> input_events,
+                                            SceneGroup& scene_group) = 0;
     virtual void render(ScreenRenderer& renderer) const = 0;
 };
 
 
 
-class SceneGroup {
+class SceneGroup
+{
 private:
 
     std::unordered_map<SceneName, std::unique_ptr<Scene>> scenes;
@@ -50,8 +55,8 @@ public:
 
 
 
-class SceneManager {
-
+class SceneManager
+{
 private:
 
     SceneGroup scene_group;

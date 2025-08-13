@@ -6,11 +6,11 @@
 #include <vector>
 
 // local
-#include "utils/assert.hpp"
-#include "utils/log.hpp"
 #include "graphics/screen_renderer.hpp"
 #include "graphics/sdl_sdlr_screen_renderer.hpp"
 #include "input.hpp"
+#include "utils/assert.hpp"
+#include "utils/log.hpp"
 
 // external
 #include <SDL2/SDL.h>

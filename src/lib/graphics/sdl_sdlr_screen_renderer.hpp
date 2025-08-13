@@ -98,20 +98,20 @@ public:
     }
 
 
-    TextureID load_texture(const std::string_view path) override
+    TextureID load_texture(std::string_view const path) override
     {
         SDLRScreenRendererTexture texture = this->load_sdl_texture(path);
         this->textures.insert({this->next_texture_id, std::move(texture)});
         return TextureID{this->next_texture_id++};
     }
 
-    void clear(const glm::u8vec3 clear_color) override
+    void clear(glm::u8vec3 const clear_color) override
     {
         SDL_SetRenderDrawColor(this->renderer, clear_color.r, clear_color.g, clear_color.b, 255);
         SDL_RenderClear(this->renderer);
     }
 
-    void draw_texture(TextureID const texture, const glm::u64vec2 position,
+    void draw_texture(TextureID const texture, glm::u64vec2 const position,
                       std::optional<glm::u64vec2> custom_draw_size = std::nullopt) override
     {
         SDLRScreenRendererTexture const& sdl_texture = this->textures.at(texture.id);
@@ -122,22 +122,22 @@ public:
 
         SDL_RenderCopy(this->renderer, sdl_texture.texture, nullptr, &dest_rect);
     }
-    void draw_texture(TextureIDHolder const& texture_holder, const glm::u64vec2 position,
+    void draw_texture(TextureIDHolder const& texture_holder, glm::u64vec2 const position,
                       std::optional<glm::u64vec2> custom_draw_size = std::nullopt) override
     {
         texture_holder.draw(*this, position, custom_draw_size);
     }
 
-    void draw_rectangle(const glm::u64vec2 position, const glm::u64vec2 size,
-                        const glm::u8vec3 color) override
+    void draw_rectangle(glm::u64vec2 const position, glm::u64vec2 const size,
+                        glm::u8vec3 const color) override
     {
         SDL_SetRenderDrawColor(this->renderer, color.r, color.g, color.b, 255);
         SDL_Rect const rect = {(int)position.x, (int)position.y, (int)size.x, (int)size.y};
         SDL_RenderFillRect(this->renderer, &rect);
     }
 
-    void draw_line(const glm::u64vec2 start, const glm::u64vec2 end,
-                   const glm::u8vec3 color) override
+    void draw_line(glm::u64vec2 const start, glm::u64vec2 const end,
+                   glm::u8vec3 const color) override
     {
         SDL_SetRenderDrawColor(this->renderer, color.r, color.g, color.b, 255);
         SDL_RenderDrawLine(this->renderer, (int)start.x, (int)start.y, (int)end.x, (int)end.y);
