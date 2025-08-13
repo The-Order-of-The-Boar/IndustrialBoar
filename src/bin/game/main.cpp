@@ -1,12 +1,12 @@
 
 // builtin
-#include <cmath>
 #include <chrono>
+#include <cmath>
 
 // local
-#include "utils/log.hpp"
 #include "core/game_context.hpp"
 #include "core/scene.hpp"
+#include "utils/log.hpp"
 
 
 
@@ -40,19 +40,21 @@ void game_main()
         if (frame_print_timer >= 2)
         {
             frame_print_timer = 0;
-            info(fmt::format("Frame interval: {}, FPS: {}\n", floor_decimal_digits(delta, 3), (uint64_t)(1 / delta)));
+            info(fmt::format("Frame interval: {}, FPS: {}\n", floor_decimal_digits(delta, 3),
+                             (uint64_t)(1 / delta)));
         }
 
         auto events = game_context.flush_events();
         scene_manager.update(delta, std::move(events));
 
-        delta = calc_delta_secs([&]()
-        {
-            auto& renderer = game_context.get_screen_renderer();
-            renderer.clear();
-            scene_manager.render(renderer);
-            renderer.present();
-        });
+        delta = calc_delta_secs(
+            [&]()
+            {
+                auto& renderer = game_context.get_screen_renderer();
+                renderer.clear();
+                scene_manager.render(renderer);
+                renderer.present();
+            });
     }
 }
 

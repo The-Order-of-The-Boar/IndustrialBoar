@@ -8,7 +8,7 @@
 
 
 
-class MainMenu final: public Scene
+class MainMenu final : public Scene
 {
 private:
 
