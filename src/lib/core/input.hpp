@@ -7,15 +7,17 @@
 
 enum class InputEventType
 {
-
 };
 
-class InputEventData {
+class InputEventData
+{
 public:
+
     virtual ~InputEventData() = default;
 };
 
-class InputEvent {
+class InputEvent
+{
 public:
 
     InputEventType type;

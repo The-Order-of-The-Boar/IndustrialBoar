@@ -3,6 +3,7 @@
 // builtin
 #include <cstddef>
 #include <optional>
+#include <string>
 #include <string_view>
 
 // external
@@ -50,8 +51,9 @@ public:
 
     explicit TextureIDHolder(std::string _path): path(std::move(_path)) {}
 
-    void draw(ScreenRenderer& renderer, glm::u64vec2 position, std::optional<glm::u64vec2> custom_draw_size = std::nullopt) const {
-
+    void draw(ScreenRenderer& renderer, glm::u64vec2 position,
+              std::optional<glm::u64vec2> custom_draw_size = std::nullopt) const
+    {
         if (this->texture_id.has_value() == false)
             this->texture_id.emplace(renderer.load_texture(this->path));
 
