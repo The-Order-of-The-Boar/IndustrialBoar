@@ -31,25 +31,17 @@ WorldScene::WorldScene()
 void WorldScene::try_move_resource(Belt& origin)
 {
     const glm::u64vec2 target_index = origin.get_output_index();
-    std::cout << "trying to move " << origin.world_index.x << " , " << origin.world_index.y
-              << " to " << target_index.x << " , " << target_index.y << std::endl;
     if (this->world[target_index.x][target_index.y].size() > 0)
     {
         Belt& target_belt = this->belts[this->world[target_index.x][target_index.y][0]];
         if (!target_belt.resource.has_value())
         {
             target_belt.resource = origin.resource;
-            std::cout << "moving " << origin.world_index.x << " , " << origin.world_index.y
-                      << " to " << target_index.x << " , " << target_index.y << std::endl;
-            std::cout << "target belt index: " << target_belt.world_index.x << " ,"
-                      << target_belt.world_index.y << std::endl;
             target_belt.resource->world_index = target_index;
             target_belt.resource->moved_this_tick = true;
             origin.resource = std::nullopt;
         }
     }
-    else
-        std::cout << "target has not a belt\n";
 }
 
 void WorldScene::update_belts()
@@ -79,7 +71,6 @@ std::optional<SceneExit> WorldScene::update(double delta, std::vector<InputEvent
     if (this->update_belts_timer > 1)
     {
         this->update_belts_timer -= 1;
-        std::cout << "belts update\n";
         this->update_belts();
     }
 
