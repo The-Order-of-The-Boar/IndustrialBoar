@@ -14,7 +14,7 @@ static inline std::array<TextureIDHolder, 4> textures{
     TextureIDHolder{"assets/textures/belt_left.png"},
 };
 
-Belt::Belt(const glm::u64vec2 index, const Rotation rotation): GraphicEntity{index}
+Belt::Belt(glm::u64vec2 const index, Rotation const rotation): GraphicEntity{index}
 {
     this->current_rotation = rotation;
 }

@@ -30,7 +30,7 @@ public:
 public: // ctor's, dtor's, and move semantics
 
     explicit SDLRScreenRendererTexture(SDL_Texture* const texture): texture{texture} {}
-    SDLRScreenRendererTexture(SDLRScreenRendererTexture const&) = delete;
+    SDLRScreenRendererTexture(SDLRScreenRendererTexture const&)            = delete;
     SDLRScreenRendererTexture& operator=(SDLRScreenRendererTexture const&) = delete;
 
     SDLRScreenRendererTexture(SDLRScreenRendererTexture&& other) noexcept: texture{other.texture}

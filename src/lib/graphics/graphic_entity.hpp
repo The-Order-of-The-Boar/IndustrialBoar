@@ -12,7 +12,7 @@ class GraphicEntity : public Entity
 {
 public:
 
-    GraphicEntity(const glm::u64vec2 index): world_index{index} {};
+    GraphicEntity(glm::u64vec2 const index): world_index{index} {};
 
     glm::u64vec2 world_index;
 

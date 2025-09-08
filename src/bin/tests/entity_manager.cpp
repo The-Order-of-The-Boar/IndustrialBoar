@@ -38,7 +38,7 @@ TEST_CASE("Entity Manager")
 
     SECTION("add child")
     {
-        auto& root = dynamic_cast<TestEntity&>(manager.get_entity(manager.get_root_id()));
+        auto& root    = dynamic_cast<TestEntity&>(manager.get_entity(manager.get_root_id()));
         auto child_id = root.add_child(manager, std::make_unique<TestEntity>(666));
         REQUIRE(root.get_child_count(manager) == 1);
         REQUIRE(dynamic_cast<TestEntity&>(manager.get_entity(child_id)).value == 666);
@@ -52,7 +52,7 @@ TEST_CASE("Entity Manager")
 
     SECTION("add multiple children")
     {
-        auto& root = dynamic_cast<TestEntity&>(manager.get_entity(manager.get_root_id()));
+        auto& root     = dynamic_cast<TestEntity&>(manager.get_entity(manager.get_root_id()));
         auto child1_id = root.add_child(manager, std::make_unique<TestEntity>(666));
         auto child2_id = root.add_child(manager, std::make_unique<TestEntity>(667));
         auto child3_id = root.add_child(manager, std::make_unique<TestEntity>(668));

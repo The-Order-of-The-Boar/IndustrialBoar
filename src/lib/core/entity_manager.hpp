@@ -60,7 +60,7 @@ private:
 
 public:
 
-    Entity() = default;
+    Entity()          = default;
     virtual ~Entity() = default;
 
     // base functionality

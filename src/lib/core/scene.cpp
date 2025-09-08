@@ -41,7 +41,7 @@ SceneManager::SceneManager()
 
 void SceneManager::update(double delta, std::vector<InputEvent> input_events)
 {
-    auto& scene = this->scene_group.get_scene(this->current_scene);
+    auto& scene     = this->scene_group.get_scene(this->current_scene);
     auto scene_exit = scene.update(delta, std::move(input_events), this->scene_group);
 
     if (scene_exit.has_value())

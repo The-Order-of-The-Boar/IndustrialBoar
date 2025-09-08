@@ -12,8 +12,8 @@
 
 class Resource : public GraphicEntity
 {
-    static const constexpr uint64_t ITEM_SIZE = Constants::TILE_SIZE / 2;
-    static const constexpr std::optional<glm::u64vec2> RENDER_SIZE =
+    static constexpr uint64_t const ITEM_SIZE = Constants::TILE_SIZE / 2;
+    static constexpr std::optional<glm::u64vec2> const RENDER_SIZE =
         glm::u64vec2(ITEM_SIZE, ITEM_SIZE);
 
 public:
@@ -24,7 +24,7 @@ public:
         COOPER
     };
 
-    Resource(const glm::u64vec2 index, const ResourceType type);
+    Resource(glm::u64vec2 const index, ResourceType const type);
 
     ResourceType type;
     bool moved_this_tick = false;
