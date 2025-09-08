@@ -6,11 +6,12 @@
 #include <vector>
 
 // local
+#include "../core/constants.hpp"
 #include "../core/entity_manager.hpp"
+#include "../core/perlim_noise.hpp"
 #include "../core/scene.hpp"
-#include "../graphics/graphic_entity.hpp"
-
 #include "../entities/belt.hpp"
+#include "../graphics/graphic_entity.hpp"
 
 
 
@@ -19,8 +20,10 @@ class WorldScene final : public Scene
 private:
 
 
-    std::array<std::array<std::vector<size_t>, 32>, 32> world;
+    std::array<std::array<std::vector<size_t>, Constants::WORLD_SIZE>, Constants::WORLD_SIZE> world;
     std::vector<Belt> belts;
+
+    PerlimNoise noiser;
 
     double update_belts_timer = 0;
 
