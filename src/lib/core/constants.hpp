@@ -5,6 +5,7 @@
 
 struct Constants
 {
-    const static constexpr uint64_t WORLD_SIZE = 16;
-    const static constexpr uint64_t TILE_SIZE = 64;
+    static constexpr uint64_t const SCREEN_SIZE = 1024;
+    static constexpr uint64_t const WORLD_SIZE  = 16;
+    static constexpr uint64_t const TILE_SIZE   = 64;
 };
