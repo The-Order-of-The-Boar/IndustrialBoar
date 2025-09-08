@@ -24,7 +24,7 @@ class GameContext
 {
 private:
 
-    SDL_Window* window = nullptr;
+    SDL_Window* window                                  = nullptr;
     std::unique_ptr<SDLRScreenRenderer> screen_renderer = nullptr;
 
 public:

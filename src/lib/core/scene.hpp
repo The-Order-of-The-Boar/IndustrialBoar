@@ -33,7 +33,7 @@ public:
 
     virtual std::optional<SceneExit> update(double delta, std::vector<InputEvent> input_events,
                                             SceneGroup& scene_group) = 0;
-    virtual void render(ScreenRenderer& renderer) const = 0;
+    virtual void render(ScreenRenderer& renderer) const              = 0;
 };
 
 

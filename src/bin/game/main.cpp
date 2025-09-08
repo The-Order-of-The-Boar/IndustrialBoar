@@ -31,7 +31,7 @@ double floor_decimal_digits(double value, uint64_t digits)
     GameContext game_context{"Industrial Boar", {1024, 1024}};
     SceneManager scene_manager;
 
-    double delta = 0;
+    double delta             = 0;
     double frame_print_timer = 0;
     while (true)
     {

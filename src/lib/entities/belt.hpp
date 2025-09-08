@@ -19,7 +19,7 @@ public:
         LEFT
     };
 
-    Belt(const glm::u64vec2 index, const Rotation rotation);
+    Belt(glm::u64vec2 const index, Rotation const rotation);
 
     Rotation current_rotation;
     std::optional<Resource> queued_resource;
