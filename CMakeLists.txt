@@ -74,6 +74,8 @@ add_library(industrialboar STATIC
     src/lib/scenes/world_scene.hpp
     src/lib/scenes/world_scene.cpp
     src/lib/graphics/screen_renderer.hpp
+    src/lib/graphics/imgui_handler.hpp
+    src/lib/graphics/imgui_handler.cpp
     src/lib/graphics/sdl_sdlr_screen_renderer.hpp
     src/lib/graphics/graphic_entity.hpp
     src/lib/entities/belt.hpp
@@ -81,8 +83,23 @@ add_library(industrialboar STATIC
     src/lib/entities/resource.hpp
     src/lib/entities/resource.cpp
 )
+
+# |--------------------------------------------------------------------------|
+# |                               dependencies                               |
+# |--------------------------------------------------------------------------|
+find_package(fmt CONFIG REQUIRED)
+find_package(glm CONFIG REQUIRED)
+find_package(Catch2 CONFIG REQUIRED)
+find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
+find_package(imgui CONFIG REQUIRED)
+
+
 target_include_directories(industrialboar INTERFACE src/lib)
-target_link_libraries(industrialboar PUBLIC fmt::fmt glm::glm SDL2 SDL2_image)
+target_link_libraries(industrialboar PUBLIC fmt::fmt)
+target_link_libraries(industrialboar PUBLIC SDL2::SDL2 SDL2::SDL2main)
+target_link_libraries(industrialboar PRIVATE $<IF:$<TARGET_EXISTS:SDL2_image::SDL2_image>,SDL2_image::SDL2_image,SDL2_image::SDL2_image-static>)
+target_link_libraries(industrialboar PUBLIC imgui::imgui)
 set_compile_flags(industrialboar)
 
 # ------------------------------- game target --------------------------------
@@ -98,9 +115,3 @@ add_executable(tests
 target_link_libraries(tests PRIVATE industrialboar Catch2::Catch2 Catch2::Catch2WithMain)
 set_compile_flags(tests)
 
-# |--------------------------------------------------------------------------|
-# |                               dependencies                               |
-# |--------------------------------------------------------------------------|
-find_package(fmt CONFIG REQUIRED)
-find_package(glm CONFIG REQUIRED)
-find_package(Catch2 CONFIG REQUIRED)

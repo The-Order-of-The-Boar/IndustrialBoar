@@ -6,6 +6,7 @@
 // local
 #include "core/game_context.hpp"
 #include "core/scene.hpp"
+#include "graphics/imgui_handler.hpp"
 #include "utils/log.hpp"
 
 
@@ -49,6 +50,11 @@ double floor_decimal_digits(double value, uint64_t digits)
         delta = calc_delta_secs(
             [&]()
             {
+                auto& hud_renderer = game_context.get_hud_renderer();
+                hud_renderer.start_frame();
+                scene_manager.render_hud(hud_renderer);
+                hud_renderer.end_frame();
+
                 auto& renderer = game_context.get_screen_renderer();
                 renderer.clear();
                 scene_manager.render(renderer);

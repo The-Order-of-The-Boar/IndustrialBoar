@@ -5,6 +5,7 @@
 #include <vector>
 
 // local
+#include "../graphics/imgui_handler.hpp"
 #include "../graphics/screen_renderer.hpp"
 #include "../utils/assert.hpp"
 #include "input.hpp"
@@ -34,6 +35,7 @@ public:
     virtual std::optional<SceneExit> update(double delta, std::vector<InputEvent> input_events,
                                             SceneGroup& scene_group) = 0;
     virtual void render(ScreenRenderer& renderer) const              = 0;
+    virtual void render_hud(ImGuiHandler& renderer) const            = 0;
 };
 
 
@@ -71,4 +73,5 @@ public:
 
     void update(double delta, std::vector<InputEvent> input_events);
     void render(ScreenRenderer& renderer) const;
+    void render_hud(ImGuiHandler& renderer) const;
 };

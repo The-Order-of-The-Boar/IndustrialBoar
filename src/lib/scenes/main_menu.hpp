@@ -45,4 +45,6 @@ public:
     {
         renderer.draw_texture(this->example_texture, {(uint64_t)this->pos, (uint64_t)this->pos});
     }
+
+    void render_hud([[maybe_unused]] ImGuiHandler& renderer) const {}
 };
