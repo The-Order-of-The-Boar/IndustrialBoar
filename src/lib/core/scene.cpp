@@ -60,3 +60,9 @@ void SceneManager::render(ScreenRenderer& renderer) const
     auto& scene = this->scene_group.get_scene(this->current_scene);
     scene.render(renderer);
 }
+
+void SceneManager::render_hud(ImGuiHandler& renderer) const
+{
+    auto& scene = this->scene_group.get_scene(this->current_scene);
+    scene.render_hud(renderer);
+}

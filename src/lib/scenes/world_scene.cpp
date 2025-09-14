@@ -5,6 +5,7 @@
 // local
 #include "../core/perlim_noise.hpp"
 #include "../entities/belt.hpp"
+#include <imgui.h>
 #include <iomanip>
 
 WorldScene::WorldScene(): noiser{static_cast<uint32_t>(time(nullptr))}
@@ -97,4 +98,16 @@ void WorldScene::render(ScreenRenderer& renderer) const
     {
         belt.render(renderer);
     }
+}
+
+void WorldScene::render_hud([[maybe_unused]] ImGuiHandler& renderer) const
+{
+    bool panel_visible = true;
+    ImGui::Begin("Game", &panel_visible);
+    ImGui::Text("Boar Colonization Started");
+    ImGui::ShowDemoWindow();
+
+    auto const io = ImGui::GetIO();
+
+    ImGui::End();
 }

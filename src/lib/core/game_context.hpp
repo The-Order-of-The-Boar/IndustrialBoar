@@ -6,6 +6,7 @@
 #include <vector>
 
 // local
+#include "graphics/imgui_handler.hpp"
 #include "graphics/screen_renderer.hpp"
 #include "graphics/sdl_sdlr_screen_renderer.hpp"
 #include "input.hpp"
@@ -17,6 +18,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_video.h>
 #include <glm/vec2.hpp>
+#include <imgui_impl_sdl2.h>
 
 
 
@@ -26,6 +28,7 @@ private:
 
     SDL_Window* window                                  = nullptr;
     std::unique_ptr<SDLRScreenRenderer> screen_renderer = nullptr;
+    std::unique_ptr<ImGuiHandler> hud_renderer          = nullptr;
 
 public:
 
@@ -43,11 +46,19 @@ public:
 
         // create screen renderer
         this->screen_renderer = std::make_unique<SDLRScreenRenderer>(this->window);
+
+        this->hud_renderer =
+            std::make_unique<ImGuiHandler>(this->window, this->screen_renderer->renderer);
     }
 
     ScreenRenderer& get_screen_renderer()
     {
         return *this->screen_renderer;
+    }
+
+    ImGuiHandler& get_hud_renderer()
+    {
+        return *this->hud_renderer;
     }
 
     std::vector<InputEvent> flush_events() // NOLINT(*-convert-member-functions-to-static)
@@ -57,6 +68,7 @@ public:
         SDL_Event event;
         while (SDL_PollEvent(&event))
         {
+            ImGui_ImplSDL2_ProcessEvent(&event);
             if (event.type == SDL_QUIT)
                 graceful_exit();
         }

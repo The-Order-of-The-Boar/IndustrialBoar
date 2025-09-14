@@ -16,6 +16,7 @@
 #include <fmt/format.h>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
+#include <imgui_impl_sdlrenderer2.h>
 
 // TODO: support HIDPI displays
 
@@ -72,9 +73,14 @@ public: // public methods
 
 class SDLRScreenRenderer final : public ScreenRenderer
 {
-private:
+    friend class GameContext;
+
+protected:
 
     SDL_Renderer* renderer = nullptr;
+
+private:
+
     size_t next_texture_id = 0;
     std::unordered_map<size_t, SDLRScreenRendererTexture> textures;
 
@@ -150,6 +156,7 @@ public:
 
     void present() override
     {
+        ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), this->renderer);
         SDL_RenderPresent(this->renderer);
     }
 

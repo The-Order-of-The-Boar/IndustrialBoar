@@ -37,4 +37,5 @@ public:
                                     SceneGroup& scene_group) override;
 
     void render(ScreenRenderer& renderer) const override;
+    void render_hud(ImGuiHandler& renderer) const override;
 };
