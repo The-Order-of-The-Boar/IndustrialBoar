@@ -39,8 +39,9 @@ SceneManager::SceneManager()
     this->current_scene = SceneName::MAIN_MENU;
 }
 
-void SceneManager::update(double delta, std::vector<InputEvent> input_events)
+void SceneManager::update(double delta, std::vector<InputEvent> input_events, Camera& camera)
 {
+    camera.update(delta, input_events);
     auto& scene     = this->scene_group.get_scene(this->current_scene);
     auto scene_exit = scene.update(delta, std::move(input_events), this->scene_group);
 

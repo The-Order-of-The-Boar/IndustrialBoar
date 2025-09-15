@@ -45,7 +45,7 @@ double floor_decimal_digits(double value, uint64_t digits)
         }
 
         auto events = game_context.flush_events();
-        scene_manager.update(delta, std::move(events));
+        scene_manager.update(delta, std::move(events), game_context.get_camera());
 
         delta = calc_delta_secs(
             [&]()
