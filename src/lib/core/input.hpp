@@ -7,6 +7,11 @@
 
 enum class InputEventType
 {
+    NONE,
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT,
 };
 
 class InputEventData
@@ -21,6 +26,8 @@ class InputEvent
 public:
 
     InputEventType type;
+
+    InputEvent(InputEventType const type): type{type} {}
 
 private:
 

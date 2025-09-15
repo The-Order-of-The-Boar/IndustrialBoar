@@ -68,6 +68,7 @@ add_library(industrialboar STATIC
     src/lib/core/entity_manager.cpp
     src/lib/core/scene.hpp
     src/lib/core/scene.cpp
+    src/lib/core/camera.cpp
     src/lib/core/perlim_noise.hpp
     src/lib/core/perlim_noise.cpp
     src/lib/scenes/main_menu.hpp

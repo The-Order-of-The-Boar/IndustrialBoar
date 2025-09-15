@@ -8,6 +8,7 @@
 #include "../graphics/imgui_handler.hpp"
 #include "../graphics/screen_renderer.hpp"
 #include "../utils/assert.hpp"
+#include "camera.hpp"
 #include "input.hpp"
 
 
@@ -71,7 +72,7 @@ public:
 
 public:
 
-    void update(double delta, std::vector<InputEvent> input_events);
+    void update(double delta, std::vector<InputEvent> input_events, Camera& camera);
     void render(ScreenRenderer& renderer) const;
     void render_hud(ImGuiHandler& renderer) const;
 };

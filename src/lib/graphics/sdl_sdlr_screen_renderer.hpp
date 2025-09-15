@@ -86,7 +86,8 @@ private:
 
 public:
 
-    explicit SDLRScreenRenderer(SDL_Window* window)
+    explicit SDLRScreenRenderer(SDL_Window* window, Camera const* const camera):
+        ScreenRenderer{camera}
     {
         this->renderer =
             SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -117,28 +118,31 @@ public:
         SDL_RenderClear(this->renderer);
     }
 
-    void draw_texture(TextureID const texture, glm::u64vec2 const position,
+    void draw_texture(TextureID const texture, glm::vec2 const world_position,
                       std::optional<glm::u64vec2> custom_draw_size = std::nullopt) override
     {
         SDLRScreenRendererTexture const& sdl_texture = this->textures.at(texture.id);
         glm::u64vec2 const draw_size = custom_draw_size.value_or(sdl_texture.get_size());
 
-        SDL_Rect const dest_rect = {(int)position.x, (int)position.y, (int)draw_size.x,
-                                    (int)draw_size.y};
+        glm::u64vec2 const screen_position = this->world_to_screen_position(world_position);
+        SDL_Rect const dest_rect           = {(int)screen_position.x, (int)screen_position.y,
+                                              (int)draw_size.x, (int)draw_size.y};
 
         SDL_RenderCopy(this->renderer, sdl_texture.texture, nullptr, &dest_rect);
     }
-    void draw_texture(TextureIDHolder const& texture_holder, glm::u64vec2 const position,
+    void draw_texture(TextureIDHolder const& texture_holder, glm::vec2 const world_position,
                       std::optional<glm::u64vec2> custom_draw_size = std::nullopt) override
     {
-        texture_holder.draw(*this, position, custom_draw_size);
+        texture_holder.draw(*this, world_position, custom_draw_size);
     }
 
-    void draw_rectangle(glm::u64vec2 const position, glm::u64vec2 const size,
+    void draw_rectangle(glm::vec2 const world_position, glm::u64vec2 const size,
                         glm::u8vec3 const color) override
     {
         SDL_SetRenderDrawColor(this->renderer, color.r, color.g, color.b, 255);
-        SDL_Rect const rect = {(int)position.x, (int)position.y, (int)size.x, (int)size.y};
+        glm::u64vec2 const screen_position = this->world_to_screen_position(world_position);
+        SDL_Rect const rect = {(int)screen_position.x, (int)screen_position.y, (int)size.x,
+                               (int)size.y};
         SDL_RenderFillRect(this->renderer, &rect);
     }
 

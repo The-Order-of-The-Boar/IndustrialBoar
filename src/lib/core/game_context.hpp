@@ -1,11 +1,14 @@
 #pragma once
 
 // builtin
+#include <iostream>
 #include <memory>
 #include <string>
+#include <unordered_set>
 #include <vector>
 
 // local
+#include "camera.hpp"
 #include "graphics/imgui_handler.hpp"
 #include "graphics/screen_renderer.hpp"
 #include "graphics/sdl_sdlr_screen_renderer.hpp"
@@ -29,6 +32,7 @@ private:
     SDL_Window* window                                  = nullptr;
     std::unique_ptr<SDLRScreenRenderer> screen_renderer = nullptr;
     std::unique_ptr<ImGuiHandler> hud_renderer          = nullptr;
+    Camera camera;
 
 public:
 
@@ -45,7 +49,7 @@ public:
         ib_runtime_assert(this->window != nullptr, "Failed to create SDL window");
 
         // create screen renderer
-        this->screen_renderer = std::make_unique<SDLRScreenRenderer>(this->window);
+        this->screen_renderer = std::make_unique<SDLRScreenRenderer>(this->window, &this->camera);
 
         this->hud_renderer =
             std::make_unique<ImGuiHandler>(this->window, this->screen_renderer->renderer);
@@ -61,6 +65,40 @@ public:
         return *this->hud_renderer;
     }
 
+    Camera& get_camera()
+    {
+        return this->camera;
+    }
+
+    std::unordered_set<InputEventType> pressed_keys;
+
+    static InputEventType sdl_key_to_input_event_type(SDL_Keycode const sdl_key)
+    {
+        switch (sdl_key)
+        {
+            case SDLK_UP:
+            case SDLK_w:
+                return InputEventType::UP;
+                break;
+            case SDLK_DOWN:
+            case SDLK_s:
+                return InputEventType::DOWN;
+                break;
+            case SDLK_LEFT:
+            case SDLK_a:
+                return InputEventType::LEFT;
+                break;
+            case SDLK_RIGHT:
+            case SDLK_d:
+                return InputEventType::RIGHT;
+                break;
+
+            default:
+                return InputEventType::NONE;
+                break;
+        }
+    }
+
     std::vector<InputEvent> flush_events() // NOLINT(*-convert-member-functions-to-static)
     {
         std::vector<InputEvent> input_events;
@@ -70,7 +108,29 @@ public:
         {
             ImGui_ImplSDL2_ProcessEvent(&event);
             if (event.type == SDL_QUIT)
+            {
                 graceful_exit();
+                continue;
+            }
+
+            SDL_Keycode const key_code = event.key.keysym.sym;
+            if (event.type == SDL_KEYDOWN)
+            {
+                InputEventType event_type = sdl_key_to_input_event_type(key_code);
+                this->pressed_keys.insert(event_type);
+            }
+            else if (event.type == SDL_KEYUP)
+            {
+                InputEventType event_type = sdl_key_to_input_event_type(key_code);
+                auto iter                 = this->pressed_keys.find(event_type);
+                if (iter != this->pressed_keys.end())
+                    this->pressed_keys.erase(event_type);
+            }
+        }
+
+        for (auto const pressed_key: this->pressed_keys)
+        {
+            input_events.push_back(pressed_key);
         }
 
         return input_events;
