@@ -13,7 +13,7 @@ static inline std::array<TextureIDHolder, 2> textures{
 };
 
 Resource::Resource(glm::u64vec2 const index, ResourceType const type):
-    GraphicEntity{index}, type{type}
+    world_index{index}, type{type}
 {
 }
 

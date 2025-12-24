@@ -11,16 +11,23 @@
 #include "../core/perlim_noise.hpp"
 #include "../core/scene.hpp"
 #include "../entities/belt.hpp"
-#include "../graphics/graphic_entity.hpp"
+#include "../entities/building.hpp"
 
 
+class WorldTile
+{
+public:
+
+    double noise_value;
+    BuildingRef building;
+};
 
 class WorldScene final : public Scene
 {
 private:
 
 
-    std::array<std::array<std::vector<size_t>, Constants::WORLD_SIZE>, Constants::WORLD_SIZE> world;
+    std::array<std::array<WorldTile, Constants::WORLD_SIZE>, Constants::WORLD_SIZE> world;
     std::vector<Belt> belts;
 
     PerlimNoise noiser;

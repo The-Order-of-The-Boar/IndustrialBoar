@@ -62,6 +62,8 @@ add_library(industrialboar STATIC
     src/lib/utils/assert.cpp
     src/lib/utils/log.hpp
     src/lib/utils/log.cpp
+    src/lib/utils/time_utils.hpp
+    src/lib/utils/time_utils.cpp
     src/lib/core/input.hpp
     src/lib/core/game_context.hpp
     src/lib/core/entity_manager.hpp
@@ -78,7 +80,7 @@ add_library(industrialboar STATIC
     src/lib/graphics/imgui_handler.hpp
     src/lib/graphics/imgui_handler.cpp
     src/lib/graphics/sdl_sdlr_screen_renderer.hpp
-    src/lib/graphics/graphic_entity.hpp
+    src/lib/entities/building.hpp
     src/lib/entities/belt.hpp
     src/lib/entities/belt.cpp
     src/lib/entities/resource.hpp
