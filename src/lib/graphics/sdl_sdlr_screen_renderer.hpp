@@ -7,6 +7,7 @@
 
 // local
 #include "../utils/assert.hpp"
+#include "../utils/print_utils.hpp"
 #include "screen_renderer.hpp"
 
 // external
@@ -125,8 +126,10 @@ public:
         glm::u64vec2 const draw_size = custom_draw_size.value_or(sdl_texture.get_size());
 
         glm::u64vec2 const screen_position = this->world_to_screen_position(world_position);
-        SDL_Rect const dest_rect           = {(int)screen_position.x, (int)screen_position.y,
-                                              (int)draw_size.x, (int)draw_size.y};
+        if (!this->is_visible(screen_position, draw_size))
+            return;
+        SDL_Rect const dest_rect = {(int)screen_position.x, (int)screen_position.y,
+                                    (int)draw_size.x, (int)draw_size.y};
 
         SDL_RenderCopy(this->renderer, sdl_texture.texture, nullptr, &dest_rect);
     }
@@ -140,7 +143,12 @@ public:
                         glm::u8vec3 const color) override
     {
         SDL_SetRenderDrawColor(this->renderer, color.r, color.g, color.b, 255);
-        glm::u64vec2 const screen_position = this->world_to_screen_position(world_position);
+        glm::vec2 const screen_position = this->world_to_screen_position(world_position);
+        if (!this->is_visible(screen_position, size))
+        {
+            return;
+        }
+
         SDL_Rect const rect = {(int)screen_position.x, (int)screen_position.y, (int)size.x,
                                (int)size.y};
         SDL_RenderFillRect(this->renderer, &rect);
@@ -149,6 +157,7 @@ public:
     void draw_line(glm::u64vec2 const start, glm::u64vec2 const end,
                    glm::u8vec3 const color) override
     {
+        // TODO: culling
         SDL_SetRenderDrawColor(this->renderer, color.r, color.g, color.b, 255);
         SDL_RenderDrawLine(this->renderer, (int)start.x, (int)start.y, (int)end.x, (int)end.y);
     }

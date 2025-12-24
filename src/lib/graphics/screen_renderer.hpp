@@ -2,6 +2,7 @@
 
 // builtin
 #include <cstddef>
+#include <iostream>
 #include <optional>
 #include <string>
 #include <string_view>
@@ -12,6 +13,8 @@
 
 // local
 #include "../core/camera.hpp"
+#include "../core/constants.hpp"
+#include "../utils/print_utils.hpp"
 
 class TextureIDHolder;
 
@@ -44,9 +47,20 @@ public:
 
 protected:
 
-    glm::u64vec2 world_to_screen_position(glm::vec2 const world_position) const
+    glm::vec2 world_to_screen_position(glm::vec2 const world_position) const
     {
-        return static_cast<glm::u64vec2>(world_position + this->camera->get_position());
+        return world_position + this->camera->get_position();
+    }
+
+    bool is_visible(glm::vec2 const pos, glm::vec2 const size) const
+    {
+        if (pos.x > Constants::SCREEN_SIZE || pos.y > Constants::SCREEN_SIZE)
+            return false;
+
+        if (pos.x + size.x < 0 || pos.y + size.y < 0)
+            return false;
+
+        return true;
     }
 
 private:

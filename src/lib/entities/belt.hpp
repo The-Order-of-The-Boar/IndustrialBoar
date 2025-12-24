@@ -3,25 +3,16 @@
 #include <iostream>
 
 // local
-#include "../graphics/graphic_entity.hpp"
 #include "../graphics/screen_renderer.hpp"
+#include "building.hpp"
 #include "resource.hpp"
 
-class Belt : public GraphicEntity
+class Belt : public Building
 {
 public:
 
-    enum Rotation
-    {
-        UP = 0,
-        RIGHT,
-        DOWN,
-        LEFT
-    };
+    Belt(size_t const id, glm::u64vec2 const index, Rotation const rotation);
 
-    Belt(glm::u64vec2 const index, Rotation const rotation);
-
-    Rotation current_rotation;
     std::optional<Resource> queued_resource;
     std::optional<Resource> resource;
 

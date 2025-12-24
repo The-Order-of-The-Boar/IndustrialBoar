@@ -6,11 +6,10 @@
 
 // local
 #include "../core/constants.hpp"
-#include "../graphics/graphic_entity.hpp"
 #include "../graphics/screen_renderer.hpp"
 
 
-class Resource : public GraphicEntity
+class Resource
 {
     static constexpr uint64_t const ITEM_SIZE = Constants::TILE_SIZE / 2;
     static constexpr std::optional<glm::u64vec2> const RENDER_SIZE =
@@ -26,8 +25,9 @@ public:
 
     Resource(glm::u64vec2 const index, ResourceType const type);
 
+    glm::u64vec2 world_index;
     ResourceType type;
     bool moved_this_tick = false;
 
-    void render(ScreenRenderer& renderer) const override;
+    void render(ScreenRenderer& renderer) const;
 };
