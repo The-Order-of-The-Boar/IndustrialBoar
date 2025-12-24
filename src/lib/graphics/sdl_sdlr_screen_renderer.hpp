@@ -125,7 +125,7 @@ public:
         SDLRScreenRendererTexture const& sdl_texture = this->textures.at(texture.id);
         glm::u64vec2 const draw_size = custom_draw_size.value_or(sdl_texture.get_size());
 
-        glm::u64vec2 const screen_position = this->world_to_screen_position(world_position);
+        glm::vec2 const screen_position = this->world_to_screen_position(world_position);
         if (!this->is_visible(screen_position, draw_size))
             return;
         SDL_Rect const dest_rect = {(int)screen_position.x, (int)screen_position.y,

@@ -8,29 +8,20 @@
 // local
 #include "../core/constants.hpp"
 #include "../core/entity_manager.hpp"
-#include "../core/perlim_noise.hpp"
 #include "../core/scene.hpp"
 #include "../entities/belt.hpp"
 #include "../entities/building.hpp"
+#include "../entities/tile.hpp"
 
 
-class WorldTile
-{
-public:
-
-    double noise_value;
-    BuildingRef building;
-};
 
 class WorldScene final : public Scene
 {
 private:
 
 
-    std::array<std::array<WorldTile, Constants::WORLD_SIZE>, Constants::WORLD_SIZE> world;
+    std::array<std::array<Tile, Constants::WORLD_SIZE>, Constants::WORLD_SIZE> world;
     std::vector<Belt> belts;
-
-    PerlimNoise noiser;
 
     double update_belts_timer = 0;
 

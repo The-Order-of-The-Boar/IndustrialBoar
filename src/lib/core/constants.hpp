@@ -8,7 +8,7 @@
 
 struct Constants
 {
-    static constexpr uint64_t const SCREEN_SIZE = 1024;
-    static constexpr uint64_t const WORLD_SIZE  = 128;
-    static constexpr uint64_t const TILE_SIZE   = 64;
+    static constexpr glm::uvec2 SCREEN_SIZE{1920, 1024};
+    static constexpr uint64_t const WORLD_SIZE = 128;
+    static constexpr uint64_t const TILE_SIZE  = 64;
 };

@@ -29,7 +29,8 @@ double floor_decimal_digits(double value, uint64_t digits)
 
 [[noreturn]] void game_main()
 {
-    GameContext game_context{"Industrial Boar", {1024, 1024}};
+    GameContext game_context{"Industrial Boar",
+                             {Constants::SCREEN_SIZE.x, Constants::SCREEN_SIZE.y}};
     SceneManager scene_manager;
 
     double delta             = 0;

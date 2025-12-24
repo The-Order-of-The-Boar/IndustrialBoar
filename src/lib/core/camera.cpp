@@ -8,16 +8,16 @@ void Camera::update(double const delta, std::vector<InputEvent> const& input_eve
         switch (event.type)
         {
             case (InputEventType::UP):
-                this->position.y -= delta * Camera::CAMERA_SPEED;
-                break;
-            case (InputEventType::DOWN):
                 this->position.y += delta * Camera::CAMERA_SPEED;
                 break;
+            case (InputEventType::DOWN):
+                this->position.y -= delta * Camera::CAMERA_SPEED;
+                break;
             case (InputEventType::RIGHT):
-                this->position.x += delta * Camera::CAMERA_SPEED;
+                this->position.x -= delta * Camera::CAMERA_SPEED;
                 break;
             case (InputEventType::LEFT):
-                this->position.x -= delta * Camera::CAMERA_SPEED;
+                this->position.x += delta * Camera::CAMERA_SPEED;
                 break;
 
             default:

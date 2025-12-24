@@ -54,7 +54,7 @@ protected:
 
     bool is_visible(glm::vec2 const pos, glm::vec2 const size) const
     {
-        if (pos.x > Constants::SCREEN_SIZE || pos.y > Constants::SCREEN_SIZE)
+        if (pos.x > Constants::SCREEN_SIZE.x || pos.y > Constants::SCREEN_SIZE.y)
             return false;
 
         if (pos.x + size.x < 0 || pos.y + size.y < 0)
