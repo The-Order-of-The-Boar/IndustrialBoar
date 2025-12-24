@@ -27,6 +27,7 @@ function(set_compile_flags target)
         --std=c++20
         -pedantic -Wall -Wextra -Werror
         -fdiagnostics-color=always
+        -O3
 
         $<$<CONFIG:DEBUG,RELWITHDEBINFO>:-g>
         $<$<CONFIG:DEBUG,RELWITHDEBINFO>:-fno-omit-frame-pointer>
@@ -73,6 +74,8 @@ add_library(industrialboar STATIC
     src/lib/core/camera.cpp
     src/lib/core/perlim_noise.hpp
     src/lib/core/perlim_noise.cpp
+    src/lib/core/world_generator.hpp
+    src/lib/core/world_generator.cpp
     src/lib/scenes/main_menu.hpp
     src/lib/scenes/world_scene.hpp
     src/lib/scenes/world_scene.cpp
@@ -81,6 +84,8 @@ add_library(industrialboar STATIC
     src/lib/graphics/imgui_handler.cpp
     src/lib/graphics/sdl_sdlr_screen_renderer.hpp
     src/lib/entities/building.hpp
+    src/lib/entities/tile.hpp
+    src/lib/entities/tile.cpp
     src/lib/entities/belt.hpp
     src/lib/entities/belt.cpp
     src/lib/entities/resource.hpp

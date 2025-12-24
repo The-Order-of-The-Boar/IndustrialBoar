@@ -11,21 +11,13 @@
 
 // local
 #include "../core/perlim_noise.hpp"
+#include "../core/world_generator.hpp"
 #include "../entities/belt.hpp"
 #include "../utils/time_utils.hpp"
 
-WorldScene::WorldScene(): noiser{static_cast<uint32_t>(time(nullptr))}
+WorldScene::WorldScene()
 {
-    TimeMeasurer world_gen_time{"World Generation Time", TimeMeasurer::TimeUnit::MILLISECOND};
-    for (size_t y = 0; y < Constants::WORLD_SIZE; ++y)
-    {
-        for (size_t x = 0; x < Constants::WORLD_SIZE; ++x)
-        {
-            double const noise = (this->noiser.get_fractal_brownian_motion_2d(glm::dvec2(x, y), 8));
-            this->world[x][y].noise_value = noise;
-        }
-    }
-    world_gen_time.print_time();
+    WorldGenerator::generate(this->world);
 
     for (int64_t i = 0; i < 4; ++i)
     {
@@ -107,9 +99,8 @@ void WorldScene::render(ScreenRenderer& renderer) const
         for (size_t x = 0; x < Constants::WORLD_SIZE; ++x)
         {
             glm::vec2 const tile_size = glm::uvec2{Constants::TILE_SIZE, Constants::TILE_SIZE};
-            double const noise        = this->world[x][y].noise_value;
-            renderer.draw_rectangle(tile_size * glm::vec2{x, y}, tile_size,
-                                    glm::u8vec3{55, 0 + noise * 255, 0});
+            renderer.draw_texture(this->world[x][y].get_texture(), tile_size * glm::vec2{x, y},
+                                  tile_size);
         }
     }
 
