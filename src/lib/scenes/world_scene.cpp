@@ -19,12 +19,22 @@ WorldScene::WorldScene()
 {
     WorldGenerator::generate(this->world);
 
-    for (int64_t i = 0; i < 4; ++i)
+    this->mines.emplace_back(0, glm::u64vec2{2, 0}, Building::Rotation::DOWN,
+                             Resource::ResourceType::COOPER);
+    this->world[2][0].building = this->mines[0].get_ref();
+
+    for (int64_t i = 0; i < 3; ++i)
+    {
+        belts.emplace_back(this->belts.size(), glm::u64vec2{2, i + 1}, Belt::Rotation::DOWN);
+        this->world[2][i + 1].building = this->belts.at(this->belts.size() - 1).get_ref();
+    }
+
+    for (int64_t i = -2; i < 4; ++i)
     {
         belts.emplace_back(this->belts.size(), glm::u64vec2{4 + i, 4}, Belt::Rotation::RIGHT);
         this->world[4 + i][4].building = this->belts.at(this->belts.size() - 1).get_ref();
     }
-    Belt* b     = &this->belts.at(0);
+    Belt* b     = &this->belts.at(5);
     b->resource = Resource{b->world_index, Resource::ResourceType::COOPER};
     for (int64_t i = 0; i < 4; ++i)
     {
@@ -42,18 +52,32 @@ WorldScene::WorldScene()
     }
 }
 
-void WorldScene::try_move_resource(Belt& origin)
+void WorldScene::try_move_resource(Building& origin)
 {
     glm::u64vec2 const target_index = origin.get_output_index();
     if (this->world[target_index.x][target_index.y].building.type == BuildingType::BELT)
     {
-        Belt& target_belt = this->belts[this->world[target_index.x][target_index.y].building.id];
-        if (!target_belt.resource.has_value())
+        Belt& target_building =
+            this->belts.at(this->world[target_index.x][target_index.y].building.id);
+        if (!target_building.resource.has_value())
         {
-            target_belt.resource                  = origin.resource;
-            target_belt.resource->world_index     = target_index;
-            target_belt.resource->moved_this_tick = true;
-            origin.resource                       = std::nullopt;
+            target_building.resource                  = origin.resource;
+            target_building.resource->world_index     = target_index;
+            target_building.resource->moved_this_tick = true;
+            origin.resource                           = std::nullopt;
+            if (origin.building_type == BuildingType::BELT)
+            {
+                Belt& origin_belt = this->belts.at(origin.id);
+                if (origin_belt.queued_to_move.has_value())
+                {
+                    try_move_resource(*origin_belt.queued_to_move.value());
+                    origin_belt.queued_to_move = std::nullopt;
+                }
+            }
+        }
+        else
+        {
+            target_building.queued_to_move.emplace(&origin);
         }
     }
 }
@@ -61,8 +85,12 @@ void WorldScene::try_move_resource(Belt& origin)
 void WorldScene::update_belts()
 {
     for (Belt& belt: this->belts)
+    {
         if (belt.resource.has_value())
             belt.resource->moved_this_tick = false;
+        if (belt.queued_to_move.has_value())
+            belt.queued_to_move = std::nullopt;
+    }
 
     for (Belt& belt: this->belts)
     {
@@ -73,20 +101,29 @@ void WorldScene::update_belts()
     }
 }
 
+void WorldScene::update_mines()
+{
+    for (Mine& mine: this->mines)
+    {
+        mine.resource = mine.mine_resource;
+        this->try_move_resource(mine);
+    }
+}
+
+
+void WorldScene::tick()
+{
+    this->update_belts();
+    this->update_mines();
+}
+
+
 std::optional<SceneExit> WorldScene::update(double delta, std::vector<InputEvent> input_events,
                                             SceneGroup& scene_group)
 {
     (void)delta;
     (void)input_events;
     (void)scene_group;
-
-    this->update_belts_timer += delta;
-
-    if (this->update_belts_timer > 1)
-    {
-        this->update_belts_timer -= 1;
-        this->update_belts();
-    }
 
     return std::nullopt;
 }
@@ -107,6 +144,11 @@ void WorldScene::render(ScreenRenderer& renderer) const
     for (Belt const& belt: this->belts)
     {
         belt.render(renderer);
+    }
+
+    for (Mine const& mine: this->mines)
+    {
+        mine.render(renderer);
     }
 
     // frame.print_time();

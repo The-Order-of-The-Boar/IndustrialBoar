@@ -41,9 +41,28 @@ SceneManager::SceneManager()
 
 void SceneManager::update(double delta, std::vector<InputEvent> input_events, Camera& camera)
 {
+    for (auto const& event: input_events)
+    {
+        if (event.type == InputEventType::PAUSE && event.state == InputEventState::PRESSED)
+        {
+            std::cout << "pausing game\n";
+            paused = !paused;
+        }
+    }
+
+    if (paused)
+        delta = 0;
+
     camera.update(delta, input_events);
     auto& scene     = this->scene_group.get_scene(this->current_scene);
     auto scene_exit = scene.update(delta, std::move(input_events), this->scene_group);
+
+    this->tick_timer += delta;
+    if (this->tick_timer > Constants::TICK_SECONDS)
+    {
+        scene.tick();
+        this->tick_timer -= Constants::TICK_SECONDS;
+    }
 
     if (scene_exit.has_value())
     {

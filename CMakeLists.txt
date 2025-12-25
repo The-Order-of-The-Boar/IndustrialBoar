@@ -88,6 +88,8 @@ add_library(industrialboar STATIC
     src/lib/entities/tile.cpp
     src/lib/entities/belt.hpp
     src/lib/entities/belt.cpp
+    src/lib/entities/mine.hpp
+    src/lib/entities/mine.cpp
     src/lib/entities/resource.hpp
     src/lib/entities/resource.cpp
 )

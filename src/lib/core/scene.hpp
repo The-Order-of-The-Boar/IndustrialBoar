@@ -35,6 +35,7 @@ public:
 
     virtual std::optional<SceneExit> update(double delta, std::vector<InputEvent> input_events,
                                             SceneGroup& scene_group) = 0;
+    virtual void tick()                                              = 0;
     virtual void render(ScreenRenderer& renderer) const              = 0;
     virtual void render_hud(ImGuiHandler& renderer) const            = 0;
 };
@@ -62,6 +63,9 @@ public:
 class SceneManager
 {
 private:
+
+    bool paused = false;
+    double tick_timer;
 
     SceneGroup scene_group;
     SceneName current_scene;

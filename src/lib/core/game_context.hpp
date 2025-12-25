@@ -4,7 +4,7 @@
 #include <iostream>
 #include <memory>
 #include <string>
-#include <unordered_set>
+#include <unordered_map>
 #include <vector>
 
 // local
@@ -70,7 +70,7 @@ public:
         return this->camera;
     }
 
-    std::unordered_set<InputEventType> pressed_keys;
+    std::unordered_map<InputEventType, InputEventState> pressed_keys;
 
     static InputEventType sdl_key_to_input_event_type(SDL_Keycode const sdl_key)
     {
@@ -92,6 +92,9 @@ public:
             case SDLK_d:
                 return InputEventType::RIGHT;
                 break;
+            case SDLK_p:
+                return InputEventType::PAUSE;
+                break;
 
             default:
                 return InputEventType::NONE;
@@ -102,6 +105,10 @@ public:
     std::vector<InputEvent> flush_events() // NOLINT(*-convert-member-functions-to-static)
     {
         std::vector<InputEvent> input_events;
+        for (auto& key: this->pressed_keys)
+        {
+            key.second = InputEventState::HOLD;
+        }
 
         SDL_Event event;
         while (SDL_PollEvent(&event))
@@ -116,8 +123,8 @@ public:
             SDL_Keycode const key_code = event.key.keysym.sym;
             if (event.type == SDL_KEYDOWN)
             {
-                InputEventType event_type = sdl_key_to_input_event_type(key_code);
-                this->pressed_keys.insert(event_type);
+                InputEventType event_type      = sdl_key_to_input_event_type(key_code);
+                this->pressed_keys[event_type] = InputEventState::PRESSED;
             }
             else if (event.type == SDL_KEYUP)
             {
@@ -128,9 +135,9 @@ public:
             }
         }
 
-        for (auto const pressed_key: this->pressed_keys)
+        for (auto const& [pressed_key, state]: this->pressed_keys)
         {
-            input_events.push_back(pressed_key);
+            input_events.emplace_back(pressed_key, state);
         }
 
         return input_events;

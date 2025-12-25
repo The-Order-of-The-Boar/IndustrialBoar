@@ -8,10 +8,10 @@
 #include "../core/constants.hpp"
 
 static inline std::array<TextureIDHolder, 4> textures{
-    TextureIDHolder{"assets/textures/belt_up.png"},
-    TextureIDHolder{"assets/textures/belt_right.png"},
-    TextureIDHolder{"assets/textures/belt_down.png"},
-    TextureIDHolder{"assets/textures/belt_left.png"},
+    TextureIDHolder{"assets/textures/buildings/belt_up.png"},
+    TextureIDHolder{"assets/textures/buildings/belt_right.png"},
+    TextureIDHolder{"assets/textures/buildings/belt_down.png"},
+    TextureIDHolder{"assets/textures/buildings/belt_left.png"},
 };
 
 Belt::Belt(size_t const id, glm::u64vec2 const index, Rotation const rotation):
@@ -30,22 +30,4 @@ void Belt::render(ScreenRenderer& renderer) const
 
     if (this->resource.has_value())
         this->resource->render(renderer);
-}
-
-glm::u64vec2 Belt::get_output_index() const
-{
-    switch (this->current_rotation)
-    {
-        case Rotation::UP:
-            return {this->world_index.x, this->world_index.y - 1};
-        case Rotation::RIGHT:
-            return {this->world_index.x + 1, this->world_index.y};
-        case Rotation::DOWN:
-            return {this->world_index.x, this->world_index.y + 1};
-        case Rotation::LEFT:
-            return {this->world_index.x - 1, this->world_index.y};
-
-        default:
-            return {};
-    }
 }

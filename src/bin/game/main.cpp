@@ -41,8 +41,8 @@ double floor_decimal_digits(double value, uint64_t digits)
         if (frame_print_timer >= 2)
         {
             frame_print_timer = 0;
-            info(fmt::format("Frame interval: {}, FPS: {}\n", floor_decimal_digits(delta, 3),
-                             (uint64_t)(1 / delta)));
+            // info(fmt::format("Frame interval: {}, FPS: {}\n", floor_decimal_digits(delta, 3),
+            //                  (uint64_t)(1 / delta)));
         }
 
         auto events = game_context.flush_events();

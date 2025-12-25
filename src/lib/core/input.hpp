@@ -12,6 +12,13 @@ enum class InputEventType
     DOWN,
     LEFT,
     RIGHT,
+    PAUSE,
+};
+
+enum class InputEventState
+{
+    PRESSED,
+    HOLD,
 };
 
 class InputEventData
@@ -26,8 +33,10 @@ class InputEvent
 public:
 
     InputEventType type;
+    InputEventState state;
 
-    InputEvent(InputEventType const type): type{type} {}
+
+    InputEvent(InputEventType const type, InputEventState const state): type{type}, state{state} {}
 
 private:
 
