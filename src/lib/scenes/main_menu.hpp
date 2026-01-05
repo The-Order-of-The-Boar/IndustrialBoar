@@ -19,10 +19,10 @@ public:
 
     MainMenu() = default;
 
-    std::optional<SceneExit> update(double delta, std::vector<InputEvent> input_events,
+    std::optional<SceneExit> update(double delta, FrameInput const& frame_input,
                                     SceneGroup& scene_group) override
     {
-        (void)input_events;
+        (void)frame_input;
         (void)scene_group;
 
         this->pos += (delta * 200 * 5);

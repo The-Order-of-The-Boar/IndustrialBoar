@@ -3,6 +3,9 @@
 // builtin
 #include <memory>
 
+// external
+#include <glm/vec2.hpp>
+
 
 
 enum class InputEventType
@@ -13,6 +16,8 @@ enum class InputEventType
     LEFT,
     RIGHT,
     PAUSE,
+    ROTATE_LEFT,
+    ROTATE_RIGHT
 };
 
 enum class InputEventState
@@ -21,11 +26,22 @@ enum class InputEventState
     HOLD,
 };
 
-class InputEventData
+class MouseInput
 {
 public:
 
-    virtual ~InputEventData() = default;
+    enum class MouseButton
+    {
+        NONE,
+        LEFT,
+        MIDDLE,
+        RIGHT
+    };
+
+    glm::u64vec2 screen_position;
+    glm::u64vec2 mouse_index;
+
+    MouseButton button = MouseButton::NONE;
 };
 
 class InputEvent
@@ -37,8 +53,12 @@ public:
 
 
     InputEvent(InputEventType const type, InputEventState const state): type{type}, state{state} {}
+};
 
-private:
+class FrameInput
+{
+public:
 
-    std::unique_ptr<InputEventData*> data = nullptr;
+    std::vector<InputEvent> key_inputs;
+    MouseInput mouse_input;
 };

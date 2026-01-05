@@ -39,9 +39,9 @@ SceneManager::SceneManager()
     this->current_scene = SceneName::MAIN_MENU;
 }
 
-void SceneManager::update(double delta, std::vector<InputEvent> input_events, Camera& camera)
+void SceneManager::update(double delta, FrameInput frame_input, Camera& camera)
 {
-    for (auto const& event: input_events)
+    for (auto const& event: frame_input.key_inputs)
     {
         if (event.type == InputEventType::PAUSE && event.state == InputEventState::PRESSED)
         {
@@ -53,9 +53,10 @@ void SceneManager::update(double delta, std::vector<InputEvent> input_events, Ca
     if (paused)
         delta = 0;
 
-    camera.update(delta, input_events);
-    auto& scene     = this->scene_group.get_scene(this->current_scene);
-    auto scene_exit = scene.update(delta, std::move(input_events), this->scene_group);
+    camera.update(delta, frame_input);
+    frame_input.mouse_input.mouse_index = camera.get_mouse_index();
+    auto& scene                         = this->scene_group.get_scene(this->current_scene);
+    auto scene_exit = scene.update(delta, std::move(frame_input), this->scene_group);
 
     this->tick_timer += delta;
     if (this->tick_timer > Constants::TICK_SECONDS)

@@ -33,7 +33,7 @@ public:
 
     virtual ~Scene() = default;
 
-    virtual std::optional<SceneExit> update(double delta, std::vector<InputEvent> input_events,
+    virtual std::optional<SceneExit> update(double delta, FrameInput const& frame_input,
                                             SceneGroup& scene_group) = 0;
     virtual void tick()                                              = 0;
     virtual void render(ScreenRenderer& renderer) const              = 0;
@@ -76,7 +76,7 @@ public:
 
 public:
 
-    void update(double delta, std::vector<InputEvent> input_events, Camera& camera);
+    void update(double delta, FrameInput frame_input, Camera& camera);
     void render(ScreenRenderer& renderer) const;
     void render_hud(ImGuiHandler& renderer) const;
 };

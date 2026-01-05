@@ -2,23 +2,9 @@
 
 // local
 #include "../graphics/screen_renderer.hpp"
+#include "building_ref.hpp"
 #include "resource.hpp"
-
-enum BuildingType
-{
-    NO_BUILDING = 0,
-    BELT,
-    MINE,
-};
-
-
-class BuildingRef
-{
-public:
-
-    BuildingType type = BuildingType::NO_BUILDING;
-    size_t id;
-};
+#include "tile.hpp"
 
 class Building
 {
@@ -33,9 +19,10 @@ public:
     };
 
     glm::u64vec2 world_index;
+    glm::u8vec3 modulate = Constants::WHITE;
     Rotation current_rotation;
     BuildingType const building_type;
-    size_t const id;
+    size_t id;
     std::optional<Resource> resource;
 
     Building(glm::u64vec2 const index, BuildingType const building_type, size_t const id):
@@ -67,6 +54,26 @@ public:
         }
     }
 
+    void rotate(int64_t const amount)
+    {
+        this->current_rotation =
+            static_cast<Building::Rotation>((this->current_rotation + amount + 4) % 4);
+    }
+
+    void rotate_left()
+    {
+        this->rotate(-1);
+    }
+
+    void rotate_right()
+    {
+        this->rotate(1);
+    }
+
+    virtual bool can_be_build_at(Tile const& tile) const
+    {
+        return tile.building.id == BuildingType::NO_BUILDING;
+    }
 
     virtual void render(ScreenRenderer& renderer) const = 0;
 };

@@ -26,7 +26,8 @@ void Belt::render(ScreenRenderer& renderer) const
     renderer.draw_texture(
         texture,
         {this->world_index.x * Constants::TILE_SIZE, this->world_index.y * Constants::TILE_SIZE},
-        std::make_optional<glm::u64vec2>(Constants::TILE_SIZE, Constants::TILE_SIZE));
+        std::make_optional<glm::u64vec2>(Constants::TILE_SIZE, Constants::TILE_SIZE),
+        this->modulate);
 
     if (this->resource.has_value())
         this->resource->render(renderer);

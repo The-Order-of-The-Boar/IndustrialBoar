@@ -1,92 +1,76 @@
 #pragma once
 
 // builtin
-#include <cstddef>
-#include <iostream>
-#include <optional>
-#include <string>
+#include <glm/ext/vector_uint2_sized.hpp>
 #include <string_view>
-
-// external
-#include <glm/vec2.hpp>
-#include <glm/vec3.hpp>
+#include <unordered_map>
 
 // local
 #include "../core/camera.hpp"
 #include "../core/constants.hpp"
+#include "../utils/assert.hpp"
 #include "../utils/print_utils.hpp"
+#include "texture.hpp"
 
-class TextureIDHolder;
+// external
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_render.h>
+#include <SDL2/SDL_video.h>
+#include <fmt/format.h>
+#include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
+#include <imgui_impl_sdlrenderer2.h>
 
-struct TextureID
-{
-    size_t const id;
-};
+// TODO: support HIDPI displays
+
 
 class ScreenRenderer
 {
-public:
-
-    ScreenRenderer(Camera const* camera): camera{camera} {}
-
-    virtual TextureID load_texture(std::string_view path) = 0;
-
-    virtual void clear(glm::u8vec3 clear_color = {0, 0, 0})                                = 0;
-    virtual void draw_texture(TextureID texture, glm::vec2 const world_position,
-                              std::optional<glm::u64vec2> custom_draw_size = std::nullopt) = 0;
-    virtual void draw_texture(TextureIDHolder const& texture_holder, glm::vec2 const world_position,
-                              std::optional<glm::u64vec2> custom_draw_size = std::nullopt) = 0;
-    virtual void draw_rectangle(glm::vec2 const world_position, glm::u64vec2 size,
-                                glm::u8vec3 color)                                         = 0;
-    virtual void draw_line(glm::u64vec2 start, glm::u64vec2 end, glm::u8vec3 color)        = 0;
-
-    virtual void start_frame() = 0;
-    virtual void present()     = 0;
-
-    virtual ~ScreenRenderer() = default;
+    friend class GameContext;
 
 protected:
 
-    glm::vec2 world_to_screen_position(glm::vec2 const world_position) const
-    {
-        return world_position + this->camera->get_position();
-    }
-
-    bool is_visible(glm::vec2 const pos, glm::vec2 const size) const
-    {
-        if (pos.x > Constants::SCREEN_SIZE.x || pos.y > Constants::SCREEN_SIZE.y)
-            return false;
-
-        if (pos.x + size.x < 0 || pos.y + size.y < 0)
-            return false;
-
-        return true;
-    }
+    SDL_Renderer* renderer = nullptr;
 
 private:
 
+    size_t next_texture_id = 0;
+    std::unordered_map<size_t, SDLRendererTexture> textures;
     Camera const* const camera;
-};
-
-
-class TextureIDHolder
-{
-private:
-
-
-    std::string const path;
-    mutable std::optional<TextureID> texture_id;
 
 public:
 
-    explicit TextureIDHolder(std::string _path): path(std::move(_path)) {}
+    explicit ScreenRenderer(SDL_Window* window, Camera const* const camera);
 
-    void draw(ScreenRenderer& renderer, glm::vec2 const screen_position,
-              std::optional<glm::u64vec2> custom_draw_size = std::nullopt) const
-    {
-        if (this->texture_id.has_value() == false)
-            this->texture_id.emplace(renderer.load_texture(this->path));
+    ~ScreenRenderer();
 
-        renderer.draw_texture(this->texture_id.value(), screen_position, custom_draw_size);
-    }
+
+    TextureID load_texture(std::string_view const path);
+    SDLRendererTexture& get_texture(TextureIDHolder& texture_holder);
+
+    void clear(glm::u8vec3 const clear_color = {0, 0, 0});
+
+    void draw_texture(TextureIDHolder const& texture, glm::vec2 const world_position,
+                      std::optional<glm::u64vec2> custom_draw_size = std::nullopt,
+                      std::optional<glm::u8vec3> modulate          = std::nullopt);
+
+    void draw_rectangle(glm::vec2 const world_position, glm::u64vec2 const size,
+                        glm::u8vec3 const color);
+
+    void draw_line(glm::u64vec2 const start, glm::u64vec2 const end, glm::u8vec3 const color);
+
+    void start_frame();
+
+    void present();
+
+    SDLRendererTexture& get_texture(TextureIDHolder const& texture);
+
+private:
+
+
+    glm::vec2 world_to_screen_position(glm::vec2 const world_position) const;
+
+    bool is_visible(glm::vec2 const pos, glm::vec2 const size) const;
+
+    SDLRendererTexture load_sdl_texture(std::string_view const path);
 };

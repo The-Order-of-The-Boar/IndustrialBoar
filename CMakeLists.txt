@@ -80,9 +80,11 @@ add_library(industrialboar STATIC
     src/lib/scenes/world_scene.hpp
     src/lib/scenes/world_scene.cpp
     src/lib/graphics/screen_renderer.hpp
+    src/lib/graphics/screen_renderer.cpp
     src/lib/graphics/imgui_handler.hpp
     src/lib/graphics/imgui_handler.cpp
-    src/lib/graphics/sdl_sdlr_screen_renderer.hpp
+    src/lib/graphics/texture.hpp
+    src/lib/graphics/texture.cpp
     src/lib/entities/building.hpp
     src/lib/entities/tile.hpp
     src/lib/entities/tile.cpp
@@ -92,6 +94,10 @@ add_library(industrialboar STATIC
     src/lib/entities/mine.cpp
     src/lib/entities/resource.hpp
     src/lib/entities/resource.cpp
+    src/lib/entities/managers/construction_manager.hpp
+    src/lib/entities/managers/construction_manager.cpp
+    src/lib/menus/build_menu.hpp
+    src/lib/menus/build_menu.cpp
 )
 
 # |--------------------------------------------------------------------------|

@@ -12,7 +12,8 @@ public:
     Mine(size_t const id, glm::u64vec2 const index, Rotation const rotation,
          Resource::ResourceType const resource_type);
 
-    Resource const mine_resource;
+    Resource mine_resource;
 
     void render(ScreenRenderer& renderer) const override;
+    bool can_be_build_at(Tile const& tile) const override;
 };

@@ -9,51 +9,33 @@
 #include "../core/constants.hpp"
 #include "../core/entity_manager.hpp"
 #include "../core/scene.hpp"
-#include "../entities/belt.hpp"
+#include "../core/world.hpp"
 #include "../entities/building.hpp"
-#include "../entities/mine.hpp"
+#include "../entities/managers/construction_manager.hpp"
 #include "../entities/tile.hpp"
-
+#include "../menus/build_menu.hpp"
 
 
 class WorldScene final : public Scene
 {
 private:
 
-
-    std::array<std::array<Tile, Constants::WORLD_SIZE>, Constants::WORLD_SIZE> world;
-    std::vector<Belt> belts;
-    std::vector<Mine> mines;
+    World world;
+    ConstructionManager construction_manager;
+    BuildMenu build_menu;
 
 public:
 
     WorldScene();
 
-    Building* get_building(glm::u64vec2 const index)
-    {
-        auto& ref = this->world[index.x][index.y].building;
-        switch (ref.type)
-        {
-            case BuildingType::BELT:
-                return &this->belts.at(ref.id);
-            case BuildingType::MINE:
-                return &this->mines.at(ref.id);
-            case BuildingType::NO_BUILDING:
-                return nullptr;
-
-            default:
-                return nullptr;
-                break;
-        }
-    }
 
     void try_move_resource(Building& origin);
     void update_belts();
     void update_mines();
     void tick();
-    std::optional<SceneExit> update(double delta, std::vector<InputEvent> input_events,
+    std::optional<SceneExit> update(double delta, FrameInput const& frame_input,
                                     SceneGroup& scene_group) override;
 
     void render(ScreenRenderer& renderer) const override;
-    void render_hud(ImGuiHandler& renderer) const override;
+    void render_hud(ImGuiHandler& hud_handler) const override;
 };

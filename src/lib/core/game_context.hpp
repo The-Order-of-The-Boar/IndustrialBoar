@@ -11,7 +11,6 @@
 #include "camera.hpp"
 #include "graphics/imgui_handler.hpp"
 #include "graphics/screen_renderer.hpp"
-#include "graphics/sdl_sdlr_screen_renderer.hpp"
 #include "input.hpp"
 #include "utils/assert.hpp"
 #include "utils/log.hpp"
@@ -29,9 +28,9 @@ class GameContext
 {
 private:
 
-    SDL_Window* window                                  = nullptr;
-    std::unique_ptr<SDLRScreenRenderer> screen_renderer = nullptr;
-    std::unique_ptr<ImGuiHandler> hud_renderer          = nullptr;
+    SDL_Window* window                              = nullptr;
+    std::unique_ptr<ScreenRenderer> screen_renderer = nullptr;
+    std::unique_ptr<ImGuiHandler> hud_renderer      = nullptr;
     Camera camera;
 
 public:
@@ -49,10 +48,10 @@ public:
         ib_runtime_assert(this->window != nullptr, "Failed to create SDL window");
 
         // create screen renderer
-        this->screen_renderer = std::make_unique<SDLRScreenRenderer>(this->window, &this->camera);
+        this->screen_renderer = std::make_unique<ScreenRenderer>(this->window, &this->camera);
 
-        this->hud_renderer =
-            std::make_unique<ImGuiHandler>(this->window, this->screen_renderer->renderer);
+        this->hud_renderer = std::make_unique<ImGuiHandler>(
+            this->window, this->screen_renderer->renderer, this->screen_renderer.get());
     }
 
     ScreenRenderer& get_screen_renderer()
@@ -71,6 +70,7 @@ public:
     }
 
     std::unordered_map<InputEventType, InputEventState> pressed_keys;
+    MouseInput mouse_input;
 
     static InputEventType sdl_key_to_input_event_type(SDL_Keycode const sdl_key)
     {
@@ -95,6 +95,10 @@ public:
             case SDLK_p:
                 return InputEventType::PAUSE;
                 break;
+            case SDLK_q:
+                return InputEventType::ROTATE_LEFT;
+            case SDLK_e:
+                return InputEventType::ROTATE_RIGHT;
 
             default:
                 return InputEventType::NONE;
@@ -102,9 +106,9 @@ public:
         }
     }
 
-    std::vector<InputEvent> flush_events() // NOLINT(*-convert-member-functions-to-static)
+    FrameInput flush_events() // NOLINT(*-convert-member-functions-to-static)
     {
-        std::vector<InputEvent> input_events;
+        FrameInput frame_input;
         for (auto& key: this->pressed_keys)
         {
             key.second = InputEventState::HOLD;
@@ -133,14 +137,34 @@ public:
                 if (iter != this->pressed_keys.end())
                     this->pressed_keys.erase(event_type);
             }
+            else if (event.type == SDL_MOUSEBUTTONDOWN)
+            {
+                this->mouse_input.button =
+                    static_cast<MouseInput::MouseButton>(event.button.button);
+            }
+            else if (event.type == SDL_MOUSEBUTTONUP)
+            {
+                MouseInput::MouseButton const released_button =
+                    static_cast<MouseInput::MouseButton>(event.button.button);
+
+                if (this->mouse_input.button == released_button)
+                {
+                    this->mouse_input.button = MouseInput::MouseButton::NONE;
+                }
+            }
+            else if (event.type == SDL_MOUSEMOTION)
+            {
+                this->mouse_input.screen_position = glm::u64vec2(event.motion.x, event.motion.y);
+            }
         }
 
         for (auto const& [pressed_key, state]: this->pressed_keys)
         {
-            input_events.emplace_back(pressed_key, state);
+            frame_input.key_inputs.emplace_back(pressed_key, state);
         }
 
-        return input_events;
+        frame_input.mouse_input = this->mouse_input;
+        return frame_input;
     }
 
     ~GameContext()

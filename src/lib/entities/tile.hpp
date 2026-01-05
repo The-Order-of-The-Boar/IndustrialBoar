@@ -1,6 +1,6 @@
 #pragma once
 
-#include "building.hpp"
+#include "building_ref.hpp"
 
 #include "../graphics/screen_renderer.hpp"
 
@@ -15,7 +15,7 @@ public:
         GRASS,
         STONE,
         COOPER,
-        IRON
+        IRON,
     };
 
     GroundType ground;

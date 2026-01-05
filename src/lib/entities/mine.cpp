@@ -28,8 +28,14 @@ void Mine::render(ScreenRenderer& renderer) const
     renderer.draw_texture(
         texture,
         {this->world_index.x * Constants::TILE_SIZE, this->world_index.y * Constants::TILE_SIZE},
-        std::make_optional<glm::u64vec2>(Constants::TILE_SIZE, Constants::TILE_SIZE));
+        std::make_optional<glm::u64vec2>(Constants::TILE_SIZE, Constants::TILE_SIZE),
+        this->modulate);
 
     // if (this->resource.has_value())
     //     this->resource->render(renderer);
+}
+
+bool Mine::can_be_build_at(Tile const& tile) const
+{
+    return tile.ground > 3;
 }

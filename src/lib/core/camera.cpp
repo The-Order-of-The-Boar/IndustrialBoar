@@ -1,9 +1,11 @@
 #include "camera.hpp"
 
+#include "constants.hpp"
 
-void Camera::update(double const delta, std::vector<InputEvent> const& input_events)
+
+void Camera::update(double const delta, FrameInput const& frame_input)
 {
-    for (auto const& event: input_events)
+    for (auto const& event: frame_input.key_inputs)
     {
         switch (event.type)
         {
@@ -24,9 +26,18 @@ void Camera::update(double const delta, std::vector<InputEvent> const& input_eve
                 break;
         }
     }
+
+    this->mouse_index =
+        (frame_input.mouse_input.screen_position - static_cast<glm::u64vec2>(this->position)) /
+        Constants::TILE_SIZE_VEC;
 }
 
 glm::vec2 Camera::get_position() const
 {
     return this->position;
+}
+
+glm::u64vec2 Camera::get_mouse_index() const
+{
+    return this->mouse_index;
 }

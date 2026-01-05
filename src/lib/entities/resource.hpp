@@ -19,8 +19,8 @@ public:
 
     enum ResourceType
     {
-        IRON = 0,
-        COOPER
+        COOPER = 0,
+        IRON,
     };
 
     Resource(glm::u64vec2 const index, ResourceType const type);

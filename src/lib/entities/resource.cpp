@@ -8,8 +8,8 @@
 #include "../core/constants.hpp"
 
 static inline std::array<TextureIDHolder, 2> textures{
-    TextureIDHolder{"assets/textures/iron.png"},
     TextureIDHolder{"assets/textures/cooper.png"},
+    TextureIDHolder{"assets/textures/iron.png"},
 };
 
 Resource::Resource(glm::u64vec2 const index, ResourceType const type):

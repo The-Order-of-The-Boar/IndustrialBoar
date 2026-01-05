@@ -9,7 +9,7 @@ class Belt : public Building
 {
 public:
 
-    Belt(size_t const id, glm::u64vec2 const index, Rotation const rotation);
+    Belt(size_t const id, glm::u64vec2 const index, Rotation const rotation = Rotation::UP);
 
     std::optional<Building*> queued_to_move;
 

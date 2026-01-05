@@ -1,5 +1,8 @@
 #include "world_generator.hpp"
 
+// builtin
+#include <iostream>
+
 // local
 #include "../utils/time_utils.hpp"
 
@@ -13,10 +16,11 @@ static constexpr double IRON_THRESHOLD   = 0.82;
 static constexpr double COOPER_THRESHOLD_SIZE = 0.03;
 static constexpr double IRON_THRESHOLD_SIZE   = 0.02;
 
-void WorldGenerator::generate(
-    std::array<std::array<Tile, Constants::WORLD_SIZE>, Constants::WORLD_SIZE>& world)
+World WorldGenerator::generate()
 {
-    TimeMeasurer world_gen_time{"World Generation Time", TimeMeasurer::TimeUnit::MILLISECOND};
+    World world;
+
+    TimeMeasurer world_gen_time{"tiles Generation Time", TimeMeasurer::TimeUnit::MILLISECOND};
     // uint32_t const seed = static_cast<uint32_t>(time(nullptr));
     // uint32_t const seed = static_cast<uint32_t>(time(nullptr));
     uint32_t const seed = 1766613113;
@@ -46,8 +50,46 @@ void WorldGenerator::generate(
             }
 
 
-            world[x][y].ground = ground;
+            world.tiles[x][y].ground = ground;
         }
     }
-    world_gen_time.print_time();
+
+    // world.mines.emplace_back(0, glm::u64vec2{2, 0}, Building::Rotation::DOWN,
+    //                          Resource::ResourceType::COOPER);
+    // world.tiles[2][0].building = world.mines[0].get_ref();
+
+    // for (int64_t i = 0; i < 3; ++i)
+    // {
+    //     world.belts.emplace_back(world.belts.size(), glm::u64vec2{2, i + 1},
+    //     Belt::Rotation::DOWN); world.tiles[2][i + 1].building = world.belts.at(world.belts.size()
+    //     - 1).get_ref();
+    // }
+
+    // for (int64_t i = -2; i < 4; ++i)
+    // {
+    //     world.belts.emplace_back(world.belts.size(), glm::u64vec2{4 + i, 4},
+    //     Belt::Rotation::RIGHT); world.tiles[4 + i][4].building =
+    //     world.belts.at(world.belts.size() - 1).get_ref();
+    // }
+    // Belt* b     = &world.belts.at(5);
+    // b->resource = Resource{b->world_index, Resource::ResourceType::COOPER};
+    // for (int64_t i = 0; i < 4; ++i)
+    // {
+    //     world.belts.emplace_back(world.belts.size(), glm::u64vec2{4 + 4, 4 + i},
+    //                              Belt::Rotation::DOWN);
+    //     world.tiles[4 + 4][4 + i].building = world.belts.at(world.belts.size() - 1).get_ref();
+    // }
+    // b           = &world.belts.at(4);
+    // b->resource = Resource{b->world_index, Resource::ResourceType::IRON};
+
+    // for (int64_t i = 0; i < 4; ++i)
+    // {
+    //     world.belts.emplace_back(world.belts.size(), glm::u64vec2{4 + 4 - i, 4 + 4},
+    //                              Belt::Rotation::LEFT);
+    //     world.tiles[4 + 4 - i][4 + 4].building = world.belts.at(world.belts.size() -
+    //     1).get_ref();
+    // }
+    // world_gen_time.print_time();
+
+    return world;
 }
