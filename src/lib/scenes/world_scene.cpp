@@ -93,6 +93,8 @@ std::optional<SceneExit> WorldScene::update(double delta, FrameInput const& fram
     (void)scene_group;
 
     this->construction_manager.update(delta, frame_input);
+    this->missile.target_position = frame_input.mouse_input.world_position;
+    this->missile.update(delta);
 
     return std::nullopt;
 }
@@ -119,6 +121,8 @@ void WorldScene::render(ScreenRenderer& renderer) const
     {
         mine.render(renderer);
     }
+
+    this->missile.render(renderer);
 
     this->construction_manager.render(renderer);
 

@@ -52,7 +52,8 @@ public:
 
     void draw_texture(TextureIDHolder const& texture, glm::vec2 const world_position,
                       std::optional<glm::u64vec2> custom_draw_size = std::nullopt,
-                      std::optional<glm::u8vec3> modulate          = std::nullopt);
+                      std::optional<glm::u8vec3> modulate          = std::nullopt,
+                      double const rotation                        = 0);
 
     void draw_rectangle(glm::vec2 const world_position, glm::u64vec2 const size,
                         glm::u8vec3 const color);

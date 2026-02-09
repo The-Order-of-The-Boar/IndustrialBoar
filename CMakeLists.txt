@@ -63,6 +63,8 @@ add_library(industrialboar STATIC
     src/lib/utils/assert.cpp
     src/lib/utils/log.hpp
     src/lib/utils/log.cpp
+    src/lib/utils/math.hpp
+    src/lib/utils/math.cpp
     src/lib/utils/time_utils.hpp
     src/lib/utils/time_utils.cpp
     src/lib/core/input.hpp
@@ -94,6 +96,8 @@ add_library(industrialboar STATIC
     src/lib/entities/mine.cpp
     src/lib/entities/resource.hpp
     src/lib/entities/resource.cpp
+    src/lib/entities/missile.hpp
+    src/lib/entities/missile.cpp
     src/lib/entities/managers/construction_manager.hpp
     src/lib/entities/managers/construction_manager.cpp
     src/lib/menus/build_menu.hpp

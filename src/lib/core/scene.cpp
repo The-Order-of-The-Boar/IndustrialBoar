@@ -55,7 +55,9 @@ void SceneManager::update(double delta, FrameInput frame_input, Camera& camera)
 
     camera.update(delta, frame_input);
     frame_input.mouse_input.mouse_index = camera.get_mouse_index();
-    auto& scene                         = this->scene_group.get_scene(this->current_scene);
+    frame_input.mouse_input.world_position =
+        frame_input.mouse_input.screen_position + glm::u64vec2(camera.get_position());
+    auto& scene     = this->scene_group.get_scene(this->current_scene);
     auto scene_exit = scene.update(delta, std::move(frame_input), this->scene_group);
 
     this->tick_timer += delta;

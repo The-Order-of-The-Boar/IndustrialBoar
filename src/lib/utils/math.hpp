@@ -3,16 +3,16 @@
 // local
 #include "assert.hpp"
 
+#include "glm/vec2.hpp"
+
+
 namespace Math
 {
-    double lerp(double const t, double const start, double const end)
-    {
-        ib_debug_assert(t >= 0 && t <= 1.0, "Non-normalized t argument");
-        return start + t * (end - start);
-    }
+    double lerp(double const t, double const start, double const end);
 
-    double fade(double const t)
-    {
-        return ((6 * t - 15) * t + 10) * t * t * t;
-    }
+    double fade(double const t);
+
+    glm::vec2 get_direction_vector(double const rotation);
+    double get_vector_rotation_deg(glm::vec2 const vec);
+
 } // namespace Math

@@ -50,10 +50,11 @@ void ScreenRenderer::clear(glm::u8vec3 const clear_color)
 
 void ScreenRenderer::draw_texture(TextureIDHolder const& texture, glm::vec2 const world_position,
                                   std::optional<glm::u64vec2> custom_draw_size,
-                                  std::optional<glm::u8vec3> modulate)
+                                  std::optional<glm::u8vec3> modulate, double const rotation)
 {
     SDLRendererTexture& sdl_texture = this->get_texture(texture);
-    glm::u64vec2 const draw_size    = custom_draw_size.value_or(sdl_texture.get_size());
+    glm::u64vec2 const draw_size    = custom_draw_size.value_or(
+        sdl_texture.get_size() * glm::u64vec2{Constants::RENDER_SCALE, Constants::RENDER_SCALE});
 
     glm::vec2 const screen_position = this->world_to_screen_position(world_position);
     if (!this->is_visible(screen_position, draw_size))
@@ -63,7 +64,10 @@ void ScreenRenderer::draw_texture(TextureIDHolder const& texture, glm::vec2 cons
 
     if (modulate.has_value())
         SDL_SetTextureColorMod(sdl_texture.texture, modulate->r, modulate->g, modulate->b);
-    SDL_RenderCopy(this->renderer, sdl_texture.texture, nullptr, &dest_rect);
+    // SDL_RenderCopy(this->renderer, sdl_texture.texture, nullptr, &dest_rect);
+    SDL_Point center(draw_size.x / 2, draw_size.y / 2);
+    SDL_RenderCopyEx(this->renderer, sdl_texture.texture, nullptr, &dest_rect, rotation, &center,
+                     SDL_FLIP_NONE);
 }
 
 void ScreenRenderer::draw_rectangle(glm::vec2 const world_position, glm::u64vec2 const size,

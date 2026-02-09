@@ -12,6 +12,7 @@
 #include "../core/world.hpp"
 #include "../entities/building.hpp"
 #include "../entities/managers/construction_manager.hpp"
+#include "../entities/missile.hpp"
 #include "../entities/tile.hpp"
 #include "../menus/build_menu.hpp"
 
@@ -23,6 +24,8 @@ private:
     World world;
     ConstructionManager construction_manager;
     BuildMenu build_menu;
+
+    Missile missile;
 
 public:
 

@@ -39,6 +39,7 @@ public:
     };
 
     glm::u64vec2 screen_position;
+    glm::u64vec2 world_position;
     glm::u64vec2 mouse_index;
 
     MouseButton button = MouseButton::NONE;
